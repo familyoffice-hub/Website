@@ -1,20 +1,29 @@
 [
   {
+    "id": "artikel-editorial-1",
+    "date": "22 Jun 2026",
+    "title": "Opini: Mengapa Family Office Perlu Memahami DeFi Sejak Dini",
+    "summary": "Artikel editorial yang ditulis manual oleh penulis. Tampil di menu \"Artikel\".",
+    "tags": ["Artikel", "DeFi"],
+    "source": "",
+    "html": "<p>Ini contoh <b>artikel manual</b> yang ditulis sendiri oleh penulis (bukan dari AI). Untuk menambah artikel seperti ini, cukup edit file <b>posts.json</b> dan tambahkan satu entri dengan tag \"Artikel\".</p><h3>Poin Utama</h3><p>Anda bebas menulis opini, analisis mendalam, atau edukasi di sini.</p><h3>Penutup</h3><p>Artikel manual dan artikel otomatis dari AI tampil berdampingan di website yang sama.</p>"
+  },
+  {
     "id": "demo-3", "date": "22 Jun 2026", "title": "Tokenisasi Saham Mulai Dilirik Investor Ritel Indonesia",
-    "summary": "Minat terhadap aset tokenized (RWA) meningkat seiring kejelasan regulasi. Apa artinya bagi investor?",
+    "summary": "Minat terhadap aset tokenized (RWA) meningkat seiring kejelasan regulasi.",
     "tags": ["Regulation","Saham","Crypto"], "source": "https://contoh.id/sumber",
-    "html": "<p>Tokenisasi saham dan real-world asset (RWA) makin menjadi perhatian. Artikel ini contoh; setelah sistem berjalan, AI menulis dan menerbitkan artikel asli tiap hari.</p><h3>Mengapa Penting</h3><p>Akses lebih luas, likuiditas, dan transparansi on-chain.</p><h3>Yang Perlu Diperhatikan</h3><p>Risiko regulasi, custody, dan likuiditas tetap perlu ditimbang.</p>"
+    "html": "<p>Tokenisasi saham dan real-world asset (RWA) makin menjadi perhatian. Contoh artikel otomatis dari AI.</p><h3>Mengapa Penting</h3><p>Akses lebih luas, likuiditas, dan transparansi on-chain.</p>"
   },
   {
     "id": "demo-2", "date": "22 Jun 2026", "title": "The Fed Tahan Suku Bunga: Dampak ke Saham & Crypto",
     "summary": "Sinyal suku bunga lebih lama menekan obligasi dan menggerakkan aset berisiko.",
     "tags": ["Makro","Crypto"], "source": "",
-    "html": "<p>Contoh artikel makro. The Fed mengindikasikan suku bunga bertahan lebih lama.</p><h3>Saham</h3><p>Sektor sensitif suku bunga tertekan.</p><h3>Crypto</h3><p>Volatilitas meningkat mengikuti sentimen global.</p>"
+    "html": "<p>Contoh artikel makro. The Fed mengindikasikan suku bunga bertahan lebih lama.</p><h3>Crypto</h3><p>Volatilitas meningkat mengikuti sentimen global.</p>"
   },
   {
     "id": "demo-1", "date": "21 Jun 2026", "title": "DeFi: Imbal Hasil Staking Bergerak di Protokol Utama",
     "summary": "Perubahan yield dan likuiditas di beberapa protokol DeFi pekan ini.",
     "tags": ["DeFi","Crypto"], "source": "",
-    "html": "<p>Contoh artikel DeFi tentang pergerakan yield staking.</p><h3>Risiko</h3><p>Smart contract dan likuiditas tetap jadi perhatian utama.</p>"
+    "html": "<p>Contoh artikel DeFi tentang pergerakan yield staking.</p><h3>Risiko</h3><p>Smart contract dan likuiditas tetap jadi perhatian.</p>"
   }
 ]
