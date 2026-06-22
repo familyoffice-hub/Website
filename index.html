@@ -250,10 +250,10 @@
     {y:"^TWII",s:"TAIWAN"},{y:"^NSEI",s:"NIFTY 50"},{y:"^BSESN",s:"SENSEX"},{y:"^STI",s:"STI"},
     {y:"^KLSE",s:"KLCI"},{y:"^SET.BK",s:"SET"},{y:"PSEI.PS",s:"PSEi"}
   ];
-  // Mata uang (USD base dari open.er-api.com)
+  // Mata uang terhadap Rupiah (data dari market.json)
   const FX = [
-    {pair:"USD/IDR",base:"USD",quote:"IDR"},{pair:"EUR/USD",base:"EUR",quote:"USD"},
-    {pair:"USD/JPY",base:"USD",quote:"JPY"},{pair:"GBP/USD",base:"GBP",quote:"USD"}
+    {pair:"USD/IDR"},{pair:"EUR/IDR"},{pair:"JPY/IDR"},{pair:"GBP/IDR"},{pair:"CHF/IDR"},
+    {pair:"CNY/IDR"},{pair:"CAD/IDR"},{pair:"AUD/IDR"},{pair:"SGD/IDR"},{pair:"HKD/IDR"}
   ];
   document.getElementById('yr').textContent = new Date().getFullYear();
   ['tgLink','tgLink2','tgLink3'].forEach(id=>{const a=document.getElementById(id); if(a) a.href=TELEGRAM_URL;});
