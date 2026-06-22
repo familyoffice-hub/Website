@@ -75,7 +75,7 @@
   .intro-left{min-width:0}
   .intro-latest{border:1px solid var(--line);border-radius:12px;padding:18px 20px 10px;
     background:linear-gradient(160deg,rgba(21,38,60,.6),rgba(14,26,43,.25))}
-  .il-head{margin-bottom:4px}
+  .il-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px}
   .il-head .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
   .il-list{display:flex;flex-direction:column}
   .il-item{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;font:inherit;color:inherit;
@@ -87,6 +87,12 @@
   .il-item .tg{display:inline-block;margin-top:8px}
   .il-all{display:inline-block;font-size:.78rem;color:var(--gold);padding:12px 0 4px;cursor:pointer}
   .il-all:hover{color:var(--gold-soft)}
+  .il-date{font-size:.7rem;color:var(--muted);font-family:var(--mono);white-space:nowrap}
+  .bf-item{display:flex;gap:11px;padding:11px 0;border-top:1px solid var(--line2);align-items:flex-start}
+  .bf-item:first-child{border-top:0}
+  .bf-dot{flex:0 0 auto;width:6px;height:6px;border-radius:50%;background:var(--teal);margin-top:9px}
+  .bf-tx{font-size:.92rem;color:var(--ivory-dim);line-height:1.5}
+  .bf-tx em{color:var(--gold-soft);font-style:italic}
   @media (max-width:1000px){
     .intro-grid{grid-template-columns:1fr;gap:30px}
     .intro-latest{margin-top:6px}
@@ -206,9 +212,9 @@
       <h1>Saham, Crypto &amp; Keuangan.</h1>
       <p>Menyaring kebisingan pasar menjadi sinyal: apa yang penting hari ini, mengapa, dan apa yang perlu Anda perhatikan. Disusun otomatis dari pemantauan berita sepanjang waktu.</p>
     </div>
-    <aside class="intro-latest" id="heroLatest" aria-label="Artikel terbaru">
-      <div class="il-head"><span class="eyebrow">Artikel Terbaru</span></div>
-      <div class="il-list" id="heroLatestList"></div>
+    <aside class="intro-latest" id="heroBrief" aria-label="Brief intelijen hari ini">
+      <div class="il-head"><span class="eyebrow">Brief Intelijen Hari Ini</span><span class="il-date" id="briefDate"></span></div>
+      <div class="il-list" id="heroBriefList"></div>
     </aside>
   </div>
 </section>
@@ -467,9 +473,64 @@
     window.location.href=`mailto:halo@namadomainanda.com?subject=${encodeURIComponent('Berlangganan')}&body=${encodeURIComponent('Saya ingin berlangganan update harian. Email: '+em)}`;
   };
 
+  // ====== BRIEF INTELIJEN HARI INI (baca arsip Orchestrator, lintas-repo) ======
+  const ORCH_RAW='https://raw.githubusercontent.com/familyoffice-hub/family-office-orchestrator/main/';
+  function mdItalic(t){ return esc(t).replace(/\*([^*]+)\*/g,'<em>$1</em>'); }
+  function parseExec(md){
+    const lines=md.split(/\r?\n/);
+    let i=lines.findIndex(l=>/executive summary/i.test(l));
+    if(i<0) return [];
+    const out=[];
+    for(let j=i+1;j<lines.length;j++){
+      if(/^\s*\d+\.\s/.test(lines[j])) break;          // mulai bagian bernomor berikutnya
+      const m=lines[j].match(/^\s*\*\s+(.*\S)\s*$/);    // baris bullet "*  ..."
+      if(m){ const t=m[1].trim(); if(t.indexOf('\uD83D\uDD12')>=0) continue; out.push(mdItalic(t)); } // lewati item 🔒
+    }
+    return out;
+  }
+  function renderBriefPoints(points, dateStr){
+    const box=document.getElementById('heroBrief'), list=document.getElementById('heroBriefList'), dt=document.getElementById('briefDate');
+    if(!box||!list||!points.length) return false;
+    if(dt) dt.textContent=dateStr||'';
+    list.innerHTML='';
+    points.slice(0,4).forEach(p=>{ const d=document.createElement('div'); d.className='bf-item';
+      d.innerHTML='<span class="bf-dot"></span><span class="bf-tx">'+p+'</span>'; list.appendChild(d); });
+    const a=document.createElement('a'); a.className='il-all'; a.href=TELEGRAM_URL; a.target='_blank'; a.rel='noopener';
+    a.textContent='Brief lengkap di Telegram \u2192'; list.appendChild(a);
+    box.style.display=''; return true;
+  }
+  function heroLatestFallback(){   // bila brief belum ada -> tampilkan artikel terbaru
+    const box=document.getElementById('heroBrief'), list=document.getElementById('heroBriefList'),
+          dt=document.getElementById('briefDate'), head=box?box.querySelector('.il-head .eyebrow'):null;
+    if(!box||!list) return;
+    const top=POSTS.slice(0,3);
+    if(!top.length){ box.style.display='none'; return; }
+    if(head) head.textContent='Artikel Terbaru'; if(dt) dt.textContent='';
+    list.innerHTML='';
+    top.forEach(p=>{ const b=document.createElement('button'); b.className='il-item';
+      const tag=(p.tags&&p.tags[0])?'<span class="tg">'+esc(CAT_LABEL[p.tags[0]]||p.tags[0])+'</span>':'';
+      b.innerHTML='<div class="d">'+esc(p.date||'')+'</div><h4>'+esc(p.title||'')+'</h4>'+tag;
+      b.onclick=()=>openArt(p); list.appendChild(b); });
+    const all=document.createElement('span'); all.className='il-all'; all.textContent='Lihat semua artikel \u2192';
+    all.onclick=()=>{ setCat('Artikel'); const y=document.querySelector('.chips').offsetTop-90; window.scrollTo({top:y,behavior:'smooth'}); };
+    list.appendChild(all); box.style.display='';
+  }
+  function loadHeroBrief(){
+    fetch(ORCH_RAW+'report_archive.json',{cache:'no-store'})
+      .then(r=>r.ok?r.json():[]).then(arr=>{
+        const last=Array.isArray(arr)&&arr.length?arr[arr.length-1]:null;
+        if(!last||!last.report_date) throw 0;
+        const dateStr=(last.report_title||'').replace(/^Daily Brief\s*/i,'').trim()||last.report_date;
+        return fetch(ORCH_RAW+'archive/'+last.report_date+'.md',{cache:'no-store'})
+          .then(r=>r.ok?r.text():'').then(md=>{
+            if(!renderBriefPoints(parseExec(md),dateStr)) heroLatestFallback();
+          });
+      }).catch(()=>heroLatestFallback());
+  }
+
   // muat artikel
   fetch('posts.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(posts=>{
-    POSTS = Array.isArray(posts)?posts:[]; renderChips(); renderFeed(); renderHeroLatest();
+    POSTS = Array.isArray(posts)?posts:[]; renderChips(); renderFeed(); loadHeroBrief();
   }).catch(()=>{ renderChips(); renderFeed(); });
 </script>
 </body>
