@@ -481,8 +481,6 @@
     list.innerHTML='';
     points.slice(0,4).forEach(p=>{ const d=document.createElement('div'); d.className='bf-item';
       d.innerHTML='<span class="bf-dot"></span><span class="bf-tx">'+p+'</span>'; list.appendChild(d); });
-    const a=document.createElement('a'); a.className='il-all'; a.href=TELEGRAM_URL; a.target='_blank'; a.rel='noopener';
-    a.textContent='Brief lengkap di Telegram \u2192'; list.appendChild(a);
     box.style.display=''; return true;
   }
   function heroLatestFallback(){   // bila brief belum ada -> tampilkan artikel terbaru
