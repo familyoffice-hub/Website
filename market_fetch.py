@@ -13,8 +13,12 @@ INDICES = [
     ("^TWII", "TAIWAN"), ("^NSEI", "NIFTY 50"), ("^BSESN", "SENSEX"), ("^STI", "STI"),
     ("^KLSE", "KLCI"), ("^SET.BK", "SET"), ("PSEI.PS", "PSEi"),
 ]
-FX = [("USD/IDR", "USD", "IDR"), ("EUR/USD", "EUR", "USD"),
-      ("USD/JPY", "USD", "JPY"), ("GBP/USD", "GBP", "USD")]
+FX = [
+    ("USD/IDR", "USD", "IDR"), ("EUR/IDR", "EUR", "IDR"), ("JPY/IDR", "JPY", "IDR"),
+    ("GBP/IDR", "GBP", "IDR"), ("CHF/IDR", "CHF", "IDR"), ("CNY/IDR", "CNY", "IDR"),
+    ("CAD/IDR", "CAD", "IDR"), ("AUD/IDR", "AUD", "IDR"), ("SGD/IDR", "SGD", "IDR"),
+    ("HKD/IDR", "HKD", "IDR"),
+]
 
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                     "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"}
@@ -56,7 +60,7 @@ def fetch_fx():
             v = (1 / rates[base]) if rates.get(base) else None
         else:
             v = (rates[quote] / rates[base]) if (rates.get(quote) and rates.get(base)) else None
-        out.append({"pair": pair, "price": (round(v, 4) if v else None)})
+        out.append({"pair": pair, "price": (round(v, 2) if v else None)})
     return out
 
 
