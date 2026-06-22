@@ -1,0 +1,118 @@
+{
+  "updated": null,
+  "indices": [
+    {
+      "s": "IHSG",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "S&P 500",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "NASDAQ 100",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "DJIA",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "FTSE 100",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "NIKKEI 225",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "DAX 40",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "STOXX 50",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "CAC 40",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "HSI",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "SHANGHAI",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "KOSPI",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "TAIWAN",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "NIFTY 50",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "SENSEX",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "STI",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "KLCI",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "SET",
+      "price": null,
+      "chg": null
+    },
+    {
+      "s": "PSEi",
+      "price": null,
+      "chg": null
+    }
+  ],
+  "fx": [
+    {
+      "pair": "USD/IDR",
+      "price": null
+    },
+    {
+      "pair": "EUR/USD",
+      "price": null
+    },
+    {
+      "pair": "USD/JPY",
+      "price": null
+    },
+    {
+      "pair": "GBP/USD",
+      "price": null
+    }
+  ]
+}
