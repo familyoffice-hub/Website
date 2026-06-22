@@ -242,6 +242,22 @@
     {id:"solana",s:"SOL"},{id:"ripple",s:"XRP"},{id:"cardano",s:"ADA"},
     {id:"dogecoin",s:"DOGE"},{id:"tron",s:"TRX"},{id:"chainlink",s:"LINK"},{id:"avalanche-2",s:"AVAX"}
   ];
+  // Index saham (simbol Yahoo Finance)
+  const INDICES = [
+    {y:"^JKSE",s:"IHSG"},{y:"^GSPC",s:"S&P 500"},{y:"^NDX",s:"NASDAQ 100"},{y:"^DJI",s:"DJIA"},
+    {y:"^FTSE",s:"FTSE 100"},{y:"^N225",s:"NIKKEI 225"},{y:"^GDAXI",s:"DAX 40"},{y:"^STOXX50E",s:"STOXX 50"},
+    {y:"^FCHI",s:"CAC 40"},{y:"^HSI",s:"HSI"},{y:"000001.SS",s:"SHANGHAI"},{y:"^KS11",s:"KOSPI"},
+    {y:"^TWII",s:"TAIWAN"},{y:"^NSEI",s:"NIFTY 50"},{y:"^BSESN",s:"SENSEX"},{y:"^STI",s:"STI"},
+    {y:"^KLSE",s:"KLCI"},{y:"^SET.BK",s:"SET"},{y:"PSEI.PS",s:"PSEi"}
+  ];
+  // Jembatan CORS untuk data Yahoo Finance (gratis). Bila satu bermasalah, ganti dengan yang lain di bawah.
+  const YPROXY = "https://api.allorigins.win/raw?url=";
+  // alternatif: "https://corsproxy.io/?url="
+  // Mata uang (USD base dari open.er-api.com)
+  const FX = [
+    {pair:"USD/IDR",base:"USD",quote:"IDR"},{pair:"EUR/USD",base:"EUR",quote:"USD"},
+    {pair:"USD/JPY",base:"USD",quote:"JPY"},{pair:"GBP/USD",base:"GBP",quote:"USD"}
+  ];
   document.getElementById('yr').textContent = new Date().getFullYear();
   ['tgLink','tgLink2','tgLink3'].forEach(id=>{const a=document.getElementById(id); if(a) a.href=TELEGRAM_URL;});
 
@@ -249,38 +265,94 @@
   const fmtBig = n => { if(n>=1e12) return '$'+(n/1e12).toFixed(2)+' T'; if(n>=1e9) return '$'+(n/1e9).toFixed(2)+' B'; if(n>=1e6) return '$'+(n/1e6).toFixed(2)+' M'; return '$'+n.toLocaleString('en-US'); };
   const sign = c => (c>=0?'+':'')+c.toFixed(2)+'%';
 
-  // ====== TICKER HARGA (CoinGecko gratis) — berjalan ke kiri ======
-  function renderTicker(items){
+  // ====== TICKER: Crypto + Index Bursa + Currency (berjalan ke kiri) ======
+  const TK = { crypto:[], index:[], fx:[] };
+  function tkItem(label, price, chg){
+    let c = '';
+    if(typeof chg === 'number'){ const cls = chg>=0?'up':'down'; c = `<span class="c ${cls}">${sign(chg)}</span>`; }
+    return `<span class="tk"><b>${label}</b><span class="p">${price}</span>${c}</span>`;
+  }
+  function renderTicker(){
+    const items = [...TK.crypto, ...TK.index, ...TK.fx];
     const html = items.join('');
     // gandakan agar marquee mulus & selalu penuh selebar layar
     document.getElementById('ticker').innerHTML = html + html + html + html;
   }
-  function placeholderTicker(){
-    return COINS.map(c=>`<span class="tk"><b>${c.s}</b><span class="p">…</span></span>`);
+  function fmtIdx(n){ return n.toLocaleString('en-US',{maximumFractionDigits:2}); }
+  function fmtFx(v){
+    if(v>=1000) return v.toLocaleString('en-US',{maximumFractionDigits:0});
+    if(v>=100)  return v.toLocaleString('en-US',{maximumFractionDigits:2});
+    return v.toFixed(4);
   }
-  // tampilkan langsung saat halaman dibuka (tidak menunggu data)
-  renderTicker(placeholderTicker());
+  // tampilkan placeholder langsung saat halaman dibuka (tidak menunggu data)
+  TK.crypto = COINS.map(c=>tkItem(c.s,'…'));
+  TK.index  = INDICES.map(i=>tkItem(i.s,'…'));
+  TK.fx     = FX.map(f=>tkItem(f.pair,'…'));
+  renderTicker();
 
-  let tickerOk=false, globalOk=false;
-  async function loadTicker(){
+  let cryptoOk=false, globalOk=false, fxOk=false, indexOk=false;
+
+  // --- Crypto (CoinGecko, gratis) ---
+  async function loadCrypto(){
     try{
       const ids = COINS.map(c=>c.id).join(',');
       const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`,{cache:'no-store'});
       if(!r.ok) throw 0;
-      const d = await r.json();
-      let got=0;
-      const items = COINS.map(c=>{
-        const o=d[c.id]; if(!o) return `<span class="tk"><b>${c.s}</b><span class="p">…</span></span>`;
-        got++;
-        const ch=o.usd_24h_change||0, cls=ch>=0?'up':'down';
-        return `<span class="tk"><b>${c.s}</b><span class="p">${fmtUsd(o.usd)}</span><span class="c ${cls}">${sign(ch)}</span></span>`;
+      const d = await r.json(); let got=0;
+      TK.crypto = COINS.map(c=>{
+        const o=d[c.id]; if(!o) return tkItem(c.s,'…');
+        got++; return tkItem(c.s, fmtUsd(o.usd), o.usd_24h_change||0);
       });
-      renderTicker(items);
-      if(got>0) tickerOk=true;
-    }catch(e){ /* biarkan tampilan terakhir tetap berjalan */ }
+      if(got>0){ cryptoOk=true; renderTicker(); }
+    }catch(e){}
   }
 
-  // ====== STATISTIK GLOBAL ======
+  // --- Currency (open.er-api.com, gratis) ---
+  async function loadFx(){
+    try{
+      const r = await fetch('https://open.er-api.com/v6/latest/USD',{cache:'no-store'});
+      if(!r.ok) throw 0;
+      const rates = (await r.json()).rates || {};
+      TK.fx = FX.map(f=>{
+        let v;
+        if(f.base==='USD') v = rates[f.quote];
+        else if(f.quote==='USD') v = rates[f.base] ? 1/rates[f.base] : null;
+        else v = (rates[f.quote]&&rates[f.base]) ? rates[f.quote]/rates[f.base] : null;
+        return v ? tkItem(f.pair, fmtFx(v)) : tkItem(f.pair,'…');
+      });
+      fxOk=true; renderTicker();
+    }catch(e){}
+  }
+
+  // --- Index bursa (Yahoo Finance via proxy CORS) ---
+  async function fetchIndex(ix){
+    try{
+      const yurl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ix.y)}?interval=1d&range=2d`;
+      const r = await fetch(YPROXY + encodeURIComponent(yurl), {cache:'no-store'});
+      if(!r.ok) throw 0;
+      const m = (await r.json()).chart.result[0].meta;
+      const price = m.regularMarketPrice;
+      const prev = m.chartPreviousClose || m.previousClose;
+      const chg = (prev && price) ? ((price-prev)/prev*100) : undefined;
+      return tkItem(ix.s, fmtIdx(price), chg);
+    }catch(e){ return tkItem(ix.s,'…'); }
+  }
+  async function loadIndices(){
+    // ambil dengan konkurensi terbatas (4) agar tidak membebani proxy
+    const out = new Array(INDICES.length);
+    let i = 0;
+    async function worker(){
+      while(i < INDICES.length){
+        const idx = i++; out[idx] = await fetchIndex(INDICES[idx]);
+        TK.index = out.map((x,k)=> x || tkItem(INDICES[k].s,'…'));
+        renderTicker();
+      }
+    }
+    await Promise.all([worker(),worker(),worker(),worker()]);
+    indexOk = out.some(x => x && !x.includes('…'));
+  }
+
+  // --- Statistik global (kartu di bawah header) ---
   async function loadGlobal(){
     try{
       const r = await fetch('https://api.coingecko.com/api/v3/global',{cache:'no-store'});
@@ -295,17 +367,18 @@
     }catch(e){}
   }
 
-  function refresh(){ if(!tickerOk) loadTicker(); if(!globalOk) loadGlobal(); }
-  // muat segera, lalu coba ulang cepat (2s,4s,6s,...) sampai data tampil, baru santai 60 detik
-  loadTicker(); loadGlobal();
+  // muat segera
+  loadCrypto(); loadGlobal(); loadFx(); loadIndices();
+  // coba ulang cepat untuk crypto/stat/fx sampai tampil
   let quickTries=0;
   const quick=setInterval(()=>{
     quickTries++;
-    if((tickerOk && globalOk) || quickTries>=8){ clearInterval(quick); return; }
-    refresh();
+    if((cryptoOk && globalOk && fxOk) || quickTries>=8){ clearInterval(quick); return; }
+    if(!cryptoOk) loadCrypto(); if(!globalOk) loadGlobal(); if(!fxOk) loadFx();
   }, 2500);
-  // refresh berkala (harga selalu diperbarui walau sudah pernah tampil)
-  setInterval(()=>{ tickerOk=false; globalOk=false; loadTicker(); loadGlobal(); }, 60000);
+  // refresh berkala: crypto & stat tiap 60 detik; index & currency tiap 5 menit
+  setInterval(()=>{ cryptoOk=false; globalOk=false; loadCrypto(); loadGlobal(); }, 60000);
+  setInterval(()=>{ loadFx(); loadIndices(); }, 300000);
 
   // ====== FEED ARTIKEL (posts.json dari AI/Orchestrator) ======
   const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
