@@ -390,7 +390,10 @@
   const CAT_LABEL = {Semua:'Semua',Saham:'Saham',Crypto:'Crypto',Artikel:'Artikel',Makro:'Makro',Macro:'Makro',Regulation:'Regulasi',Tax:'Pajak',Risk:'Risiko'};
 
   function catsOf(p){ return (p.tags||[]); }
+  function dispTags(p){ const sheet=String(p.id||'').indexOf('sheet-')===0;
+    return (p.tags||[]).filter(t=> sheet || (CAT_LABEL[t]||t)!=='Artikel'); }  // sembunyikan label "Artikel" di kartu berita
   function matchCat(p){ if(activeCat==='Semua') return true;
+    if(activeCat==='Artikel') return String(p.id||'').indexOf('sheet-')===0;   // hanya artikel dari Google Sheet
     const want=(CAT_LABEL[activeCat]||activeCat).toLowerCase();
     return catsOf(p).some(t=> t.toLowerCase()===activeCat.toLowerCase() || (CAT_LABEL[t]||'').toLowerCase()===want); }
 
@@ -405,7 +408,7 @@
 
   function card(p, feat){
     const b=document.createElement('button'); b.className='card'+(feat?' feat':'');
-    const tags=(p.tags||[]).slice(0,3).map(t=>`<span class="tg">${esc(CAT_LABEL[t]||t)}</span>`).join('');
+    const tags=dispTags(p).slice(0,3).map(t=>`<span class="tg">${esc(CAT_LABEL[t]||t)}</span>`).join('');
     const inner=`<div class="${feat?'ftxt':''}"><div class="d">${esc(p.date||'')}</div><h3>${esc(p.title||'')}</h3><p>${esc(p.summary||'')}</p><div class="tags">${tags}</div></div>`;
     b.innerHTML = feat ? `<div class="fbadge"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#C3A368" stroke-width="1.3"><path d="M3 17l6-6 4 4 7-8"/><path d="M21 7h-5M21 7v5"/></svg></div>${inner}` : inner;
     b.onclick=()=>openArt(p); return b;
@@ -427,25 +430,8 @@
     document.getElementById('moreRow').hidden = list.length<=shown;
   }
 
-  function renderHeroLatest(){
-    const box=document.getElementById('heroLatest'), list=document.getElementById('heroLatestList');
-    if(!box||!list) return;
-    const top=POSTS.slice(0,3);
-    if(!top.length){ box.style.display='none'; return; }
-    box.style.display=''; list.innerHTML='';
-    top.forEach(p=>{
-      const b=document.createElement('button'); b.className='il-item';
-      const tag=(p.tags&&p.tags[0])?`<span class="tg">${esc(CAT_LABEL[p.tags[0]]||p.tags[0])}</span>`:'';
-      b.innerHTML=`<div class="d">${esc(p.date||'')}</div><h4>${esc(p.title||'')}</h4>${tag}`;
-      b.onclick=()=>openArt(p); list.appendChild(b);
-    });
-    const all=document.createElement('span'); all.className='il-all'; all.textContent='Lihat semua artikel →';
-    all.onclick=()=>{ setCat('Artikel'); const y=document.querySelector('.chips').offsetTop-90; window.scrollTo({top:y,behavior:'smooth'}); };
-    list.appendChild(all);
-  }
-
   function openArt(p){
-    const tags=(p.tags||[]).map(t=>`<span class="tg">${esc(CAT_LABEL[t]||t)}</span>`).join(' ');
+    const tags=dispTags(p).map(t=>`<span class="tg">${esc(CAT_LABEL[t]||t)}</span>`).join(' ');
     const src = p.source ? `<div class="src"><a href="${esc(p.source)}" target="_blank" rel="noopener">Baca sumber asli ↗</a></div>` : '';
     document.getElementById('mBody').innerHTML =
       `<div class="art"><span class="back" id="mBack">← Kembali ke daftar</span>`+
@@ -511,9 +497,7 @@
       const tag=(p.tags&&p.tags[0])?'<span class="tg">'+esc(CAT_LABEL[p.tags[0]]||p.tags[0])+'</span>':'';
       b.innerHTML='<div class="d">'+esc(p.date||'')+'</div><h4>'+esc(p.title||'')+'</h4>'+tag;
       b.onclick=()=>openArt(p); list.appendChild(b); });
-    const all=document.createElement('span'); all.className='il-all'; all.textContent='Lihat semua artikel \u2192';
-    all.onclick=()=>{ setCat('Artikel'); const y=document.querySelector('.chips').offsetTop-90; window.scrollTo({top:y,behavior:'smooth'}); };
-    list.appendChild(all); box.style.display='';
+    box.style.display='';
   }
   function loadHeroBrief(){
     fetch(ORCH_RAW+'report_archive.json',{cache:'no-store'})
