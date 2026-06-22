@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Family Office — Intelijen Pasar: Saham, Crypto, DeFi &amp; Keuangan</title>
-<meta name="description" content="Portal intelijen pasar harian: saham, crypto, DeFi, dan keuangan. Berita yang diringkas AI, harga live, dan analisis untuk Indonesia." />
+<title>Family Office — Intelijen Pasar: Saham, Crypto &amp; Keuangan</title>
+<meta name="description" content="Portal intelijen pasar harian: saham, crypto, dan keuangan. Berita yang diringkas AI, harga live, dan analisis untuk Indonesia." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -181,7 +181,7 @@
 <!-- INTRO -->
 <section class="wrap intro">
   <span class="eyebrow">Intelijen Pasar Harian</span>
-  <h1>Saham, Crypto, DeFi &amp; Keuangan.</h1>
+  <h1>Saham, Crypto &amp; Keuangan.</h1>
   <p>Menyaring kebisingan pasar menjadi sinyal: apa yang penting hari ini, mengapa, dan apa yang perlu Anda perhatikan. Disusun otomatis dari pemantauan berita sepanjang waktu.</p>
 </section>
 
@@ -198,7 +198,7 @@
   <div class="wrap">
     <span class="eyebrow" style="color:var(--gold)">Ikuti update harian</span>
     <h2 style="margin-top:14px">Ringkasan pasar pilihan, langsung ke Anda.</h2>
-    <p>Saham, crypto, DeFi, dan keuangan — disaring tiap hari. Gratis. Atau gabung channel Telegram untuk update tercepat.</p>
+    <p>Saham, crypto, dan keuangan — disaring tiap hari. Gratis. Atau gabung channel Telegram untuk update tercepat.</p>
     <div class="row">
       <input type="email" id="subEmail" placeholder="email@anda.com" aria-label="Email" />
       <button class="btn-solid btn" id="subBtn">Berlangganan</button>
@@ -214,17 +214,17 @@
     <div class="foot-grid">
       <div style="max-width:34ch">
         <a class="brand" href="#top" style="margin-bottom:12px"><svg class="mk" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18.5" stroke="#C3A368"/><path d="M20 7v26M11 14c0 7 4 12 9 12s9-5 9-12" stroke="#C3A368" stroke-width="1.4"/><circle cx="20" cy="7" r="2.2" fill="#5FB0AC"/></svg><span>Family&nbsp;Office</span></a>
-        <p style="font-size:.9rem">Media intelijen pasar untuk Indonesia — saham, crypto, DeFi, dan keuangan. Berita diringkas AI tiap hari.</p>
+        <p style="font-size:.9rem">Media intelijen pasar untuk Indonesia — saham, crypto, dan keuangan. Berita diringkas AI tiap hari.</p>
       </div>
       <div><h4>Kanal</h4>
-        <a data-cat="Saham">Saham</a><a data-cat="Crypto">Crypto</a><a data-cat="DeFi">DeFi</a><a data-cat="Artikel">Artikel</a><a data-cat="Makro">Makro</a><a data-cat="Regulation">Regulasi</a>
+        <a data-cat="Saham">Saham</a><a data-cat="Crypto">Crypto</a><a data-cat="Artikel">Artikel</a><a data-cat="Makro">Makro</a><a data-cat="Regulation">Regulasi</a>
       </div>
       <div><h4>Ikuti</h4>
         <a href="#" id="tgLink3">Telegram</a><a href="#">X / Twitter</a><a href="#">LinkedIn</a><a href="#">Instagram</a>
       </div>
     </div>
     <p class="disclaimer">
-      Konten di situs ini bersifat informatif dan edukatif, bukan nasihat keuangan, investasi, hukum, atau pajak. Investasi pada saham, crypto, dan DeFi mengandung risiko tinggi, termasuk kemungkinan kehilangan sebagian atau seluruh modal; aset kripto sangat fluktuatif dan sebagian protokol DeFi belum sepenuhnya teruji atau diatur. Data harga disediakan oleh pihak ketiga dan dapat tertunda. Lakukan riset mandiri dan konsultasikan dengan penasihat profesional berlisensi sebelum mengambil keputusan.
+      Konten di situs ini bersifat informatif dan edukatif, bukan nasihat keuangan, investasi, hukum, atau pajak. Investasi pada saham dan aset kripto mengandung risiko tinggi, termasuk kemungkinan kehilangan sebagian atau seluruh modal; aset kripto sangat fluktuatif dan sebagiannya belum sepenuhnya diatur. Data harga disediakan oleh pihak ketiga dan dapat tertunda. Lakukan riset mandiri dan konsultasikan dengan penasihat profesional berlisensi sebelum mengambil keputusan.
       <br/><br/>© <span id="yr"></span> Family Office. Seluruh hak cipta.
     </p>
   </div>
@@ -297,10 +297,10 @@
 
   // ====== FEED ARTIKEL (posts.json dari AI/Orchestrator) ======
   const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  // Daftar menu TETAP: Artikel berada tepat setelah DeFi
-  const CATS = ['Semua','Saham','Crypto','DeFi','Artikel','Makro','Regulation'];
+  // Daftar menu TETAP: Artikel berada setelah Crypto
+  const CATS = ['Semua','Saham','Crypto','Artikel','Makro','Regulation'];
   let POSTS = [], activeCat = 'Semua', shown = 7;
-  const CAT_LABEL = {Semua:'Semua',Saham:'Saham',Crypto:'Crypto',DeFi:'DeFi',Artikel:'Artikel',Makro:'Makro',Macro:'Makro',Regulation:'Regulasi',Tax:'Pajak',Risk:'Risiko'};
+  const CAT_LABEL = {Semua:'Semua',Saham:'Saham',Crypto:'Crypto',Artikel:'Artikel',Makro:'Makro',Macro:'Makro',Regulation:'Regulasi',Tax:'Pajak',Risk:'Risiko'};
 
   function catsOf(p){ return (p.tags||[]); }
   function matchCat(p){ if(activeCat==='Semua') return true;
@@ -341,7 +341,7 @@
       `<div class="art"><span class="back" id="mBack">← Kembali ke daftar</span>`+
       `<h1>${esc(p.title||'')}</h1><div class="meta">${esc(p.date||'')} ${tags?'· '+tags:''}</div>`+
       (p.html||('<p>'+esc(p.summary||'')+'</p>'))+ src +
-      `<div class="disc">Artikel ini ringkasan editorial berbahasa Indonesia yang disusun ulang oleh AI dari pemantauan berita, dan bukan nasihat keuangan/investasi/pajak/hukum. Aset kripto &amp; DeFi berisiko tinggi. Lakukan riset mandiri.</div></div>`;
+      `<div class="disc">Artikel ini ringkasan editorial berbahasa Indonesia yang disusun ulang oleh AI dari pemantauan berita, dan bukan nasihat keuangan/investasi/pajak/hukum. Aset kripto berisiko tinggi. Lakukan riset mandiri.</div></div>`;
     document.getElementById('mBack').onclick=closeArt;
     document.getElementById('modal').hidden=false; document.body.style.overflow='hidden';
   }
