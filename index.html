@@ -3,488 +3,369 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Family Office — Keuangan, Saham, Crypto &amp; DeFi</title>
-<meta name="description" content="Family Office — pengelolaan kekayaan lintas pasar: keuangan, saham, crypto, dan DeFi. Strategi, diversifikasi, dan disiplin risiko untuk pertumbuhan jangka panjang." />
+<title>Family Office — Intelijen Pasar: Saham, Crypto, DeFi &amp; Keuangan</title>
+<meta name="description" content="Portal intelijen pasar harian: saham, crypto, DeFi, dan keuangan. Berita yang diringkas AI, harga live, dan analisis untuk Indonesia." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --ink:#0F1C2E;--ink-2:#16263C;--ink-3:#1C2F49;
-    --ivory:#F4EFE4;--ivory-dim:#D8D2C4;
-    --gold:#C3A368;--gold-soft:#D8BE8E;
-    --teal:#5E9C9A;            /* aksen aset digital / DeFi */
-    --muted:#9AA7B6;
-    --line:rgba(195,163,104,.28);
-    --maxw:1180px;--ease:cubic-bezier(.22,.61,.36,1);
+    --ink:#0E1A2B;--ink-2:#15263C;--ink-3:#1C3050;
+    --ivory:#F4EFE4;--ivory-dim:#CFD6DF;
+    --gold:#C3A368;--gold-soft:#D8BE8E;--teal:#5FB0AC;
+    --up:#4ED49A;--down:#E8826B;--muted:#94A3B4;
+    --line:rgba(195,163,104,.24);--line2:rgba(148,163,180,.16);
+    --maxw:1240px;--ease:cubic-bezier(.22,.61,.36,1);
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  body{margin:0;background:var(--ink);color:var(--ivory);
-    font-family:"Hanken Grotesk",system-ui,sans-serif;
-    font-size:clamp(1rem,.96rem + .2vw,1.06rem);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;line-height:1.08;margin:0}
+  body{margin:0;background:var(--ink);color:var(--ivory);font-family:"Hanken Grotesk",system-ui,sans-serif;
+    font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;font-weight:500;line-height:1.12;margin:0}
   a{color:inherit;text-decoration:none}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
-  .eyebrow{font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;display:inline-flex;align-items:center;gap:.7em}
-  .eyebrow::before{content:"";width:26px;height:1px;background:var(--gold);display:inline-block;opacity:.7}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .up{color:var(--up)} .down{color:var(--down)}
 
-  header.nav{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .4s var(--ease),border-color .4s}
-  header.nav .bar{display:flex;align-items:center;justify-content:space-between;height:78px}
-  header.nav.scrolled{background:rgba(15,28,46,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-  .brand{display:flex;align-items:center;gap:13px;font-family:"Fraunces",serif;font-size:1.18rem;letter-spacing:.01em}
-  .brand .mark{width:30px;height:30px;flex:0 0 auto}
-  .nav-links{display:flex;gap:30px;align-items:center}
-  .nav-links a{font-size:.92rem;color:var(--ivory-dim);transition:color .25s}
-  .nav-links a:hover{color:var(--ivory)}
-  .btn{display:inline-flex;align-items:center;gap:.6em;font-weight:600;font-size:.9rem;letter-spacing:.02em;
-    padding:.72em 1.35em;border-radius:2px;border:1px solid var(--gold);color:var(--gold);background:transparent;cursor:pointer;
-    transition:background .3s var(--ease),color .3s,transform .3s}
-  .btn:hover{background:var(--gold);color:var(--ink);transform:translateY(-1px)}
+  /* TICKER */
+  .ticker{position:sticky;top:0;z-index:45;background:#0A1422;border-bottom:1px solid var(--line2);overflow:hidden;height:42px}
+  .ticker-track{display:flex;align-items:center;gap:30px;height:42px;white-space:nowrap;width:max-content;
+    animation:scroll 60s linear infinite;will-change:transform}
+  .ticker:hover .ticker-track{animation-play-state:paused}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-25%)}}
+  .tk{display:inline-flex;align-items:center;gap:8px;font-size:.82rem}
+  .tk b{font-weight:600;letter-spacing:.02em;color:var(--ivory)}
+  .tk .p{font-family:var(--mono);color:var(--ivory-dim)}
+  .tk .c{font-family:var(--mono);font-size:.76rem}
+  @media (prefers-reduced-motion:reduce){.ticker-track{animation:none;overflow-x:auto}}
+
+  /* HEADER */
+  header.site{position:sticky;top:42px;z-index:40;background:rgba(14,26,43,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line2)}
+  .hbar{display:flex;align-items:center;justify-content:space-between;height:66px;gap:20px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:"Fraunces",serif;font-size:1.16rem;flex:0 0 auto}
+  .brand .mk{width:28px;height:28px}
+  nav.cats{display:flex;gap:22px;align-items:center;overflow:hidden}
+  nav.cats a{font-size:.9rem;color:var(--ivory-dim);transition:color .2s;cursor:pointer}
+  nav.cats a:hover{color:var(--gold-soft)}
+  .hcta{display:flex;gap:10px;align-items:center;flex:0 0 auto}
+  .btn{display:inline-flex;align-items:center;gap:.5em;font-weight:600;font-size:.86rem;padding:.6em 1.1em;border-radius:3px;
+    border:1px solid var(--gold);color:var(--gold);cursor:pointer;background:transparent;transition:background .25s,color .25s}
+  .btn:hover{background:var(--gold);color:var(--ink)}
   .btn-solid{background:var(--gold);color:var(--ink)}
-  .btn-solid:hover{background:var(--gold-soft);border-color:var(--gold-soft)}
-  .nav-toggle{display:none;background:none;border:0;color:var(--ivory);cursor:pointer;padding:8px}
+  .btn-solid:hover{background:var(--gold-soft)}
+  .menu-btn{display:none;background:none;border:0;color:var(--ivory);cursor:pointer;padding:6px}
 
-  .hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:120px 0 90px;overflow:hidden}
-  .hero::before{content:"";position:absolute;inset:0;
-    background:radial-gradient(900px 480px at 78% 18%,rgba(94,156,154,.16),transparent 60%),
-      radial-gradient(720px 520px at 12% 90%,rgba(195,163,104,.12),transparent 60%);pointer-events:none}
-  .hero-grid{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;width:100%}
-  .hero h1{font-size:clamp(2.7rem,2rem + 4vw,5.3rem);letter-spacing:-.01em}
-  .hero h1 em{font-style:italic;color:var(--gold-soft)}
-  .hero p.lead{margin:26px 0 0;max-width:36ch;color:var(--muted);font-size:1.12rem}
-  .hero .cta-row{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap}
-  .hero-note{margin-top:42px;font-size:.82rem;color:var(--muted);max-width:42ch;border-left:1px solid var(--line);padding-left:16px}
+  /* MARKET STATS */
+  .stats{border-bottom:1px solid var(--line2);background:#0C1727}
+  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .st{padding:18px 22px;border-left:1px solid var(--line2)}
+  .st:first-child{border-left:0}
+  .st .k{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .st .v{font-family:var(--mono);font-size:1.32rem;color:var(--ivory);margin-top:6px}
+  .st .ch{font-family:var(--mono);font-size:.8rem;margin-top:2px}
 
-  .horizon-card{position:relative;border:1px solid var(--line);background:linear-gradient(180deg,rgba(22,38,60,.7),rgba(15,28,46,.4));border-radius:4px;padding:34px 30px}
-  .horizon-card h3{font-size:1.05rem;font-family:"Hanken Grotesk",sans-serif;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:30px}
-  .gen-line{position:relative;height:2px;background:linear-gradient(90deg,var(--gold),var(--teal));margin:54px 6px 26px;border-radius:2px}
-  .gen-node{position:absolute;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:var(--ink);border:2px solid var(--gold)}
-  .gen-node:last-child{border-color:var(--teal)}
-  .gen-node::after{content:attr(data-label);position:absolute;left:50%;bottom:20px;transform:translateX(-50%);white-space:nowrap;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ivory-dim)}
-  .gen-node::before{content:attr(data-year);position:absolute;left:50%;top:20px;transform:translateX(-50%);white-space:nowrap;font-size:.72rem;color:var(--muted)}
-  .gen-cap{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-top:34px;border-top:1px solid var(--line);padding-top:18px}
-  .gen-cap b{color:var(--ivory);font-weight:600}
+  /* INTRO */
+  .intro{padding:46px 0 8px}
+  .intro .eyebrow{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .intro h1{font-size:clamp(2rem,1.4rem + 2.6vw,3.2rem);margin:14px 0 0;max-width:18ch}
+  .intro p{color:var(--muted);margin:16px 0 0;max-width:60ch}
 
-  .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
-  .stat{padding:34px 26px;border-left:1px solid var(--line)}
-  .stat:first-child{border-left:0;padding-left:0}
-  .stat .n{font-family:"Fraunces",serif;font-size:2.2rem;color:var(--ivory);line-height:1}
-  .stat .n span{color:var(--gold);font-size:1.2rem;vertical-align:super;margin-left:2px}
-  .stat .l{margin-top:10px;font-size:.84rem;color:var(--muted)}
+  /* CHIPS */
+  .chips{display:flex;gap:10px;flex-wrap:wrap;padding:30px 0 26px}
+  .chip{font-size:.84rem;padding:.5em 1.05em;border:1px solid var(--line);border-radius:999px;color:var(--ivory-dim);
+    background:transparent;cursor:pointer;transition:all .25s}
+  .chip:hover{border-color:var(--gold);color:var(--ivory)}
+  .chip.active{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
 
-  section.block{padding:104px 0}
-  .sec-head{max-width:64ch}
-  .sec-head h2{font-size:clamp(2rem,1.5rem + 2.2vw,3.1rem);margin-top:20px}
-  .sec-head p{color:var(--muted);margin:20px 0 0;font-size:1.08rem}
+  /* FEED */
+  .sec-title{display:flex;align-items:baseline;gap:14px;margin:8px 0 22px}
+  .sec-title h2{font-size:1.7rem}
+  .sec-title span{font-size:.8rem;color:var(--muted)}
+  .feed{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:10px}
+  .card{display:flex;flex-direction:column;gap:11px;text-align:left;border:1px solid var(--line2);border-radius:8px;
+    background:rgba(21,38,60,.4);padding:22px 20px;cursor:pointer;color:inherit;font:inherit;
+    transition:transform .3s var(--ease),border-color .3s,background .3s}
+  .card:hover{transform:translateY(-4px);border-color:var(--gold);background:rgba(21,38,60,.72)}
+  .card.feat{grid-column:span 3;flex-direction:row;gap:28px;align-items:center;padding:30px 28px}
+  .card.feat .ftxt{flex:1}
+  .card.feat .fbadge{flex:0 0 auto;width:150px;height:150px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,rgba(195,163,104,.18),rgba(95,176,172,.14));border:1px solid var(--line)}
+  .card .d{font-size:.74rem;color:var(--muted);letter-spacing:.03em}
+  .card h3{font-size:1.22rem}
+  .card.feat h3{font-size:clamp(1.5rem,1.1rem + 1.4vw,2.1rem)}
+  .card p{margin:0;color:var(--muted);font-size:.92rem}
+  .card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+  .tg{font-size:.66rem;color:var(--teal);border:1px solid rgba(95,176,172,.4);border-radius:3px;padding:1px 8px;letter-spacing:.03em}
+  .more-row{display:flex;justify-content:center;padding:36px 0 8px}
+  .empty{padding:50px 0;color:var(--muted);text-align:center;border:1px dashed var(--line2);border-radius:10px}
 
-  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:60px}
-  .pillar{border:1px solid var(--line);border-radius:4px;padding:34px 30px;background:rgba(22,38,60,.35);transition:transform .4s var(--ease),border-color .4s,background .4s}
-  .pillar:hover{transform:translateY(-4px);border-color:var(--gold);background:rgba(22,38,60,.6)}
-  .pillar .pi{width:40px;height:40px;color:var(--gold);margin-bottom:22px}
-  .pillar h3{font-size:1.5rem;margin-bottom:12px}
-  .pillar p{color:var(--muted);font-size:.98rem;margin:0}
+  /* SUBSCRIBE */
+  .sub{margin:70px 0 0;border-top:1px solid var(--line2);background:linear-gradient(180deg,#0C1727,var(--ink))}
+  .sub .wrap{padding:64px 22px;text-align:center}
+  .sub h2{font-size:clamp(1.7rem,1.2rem + 1.8vw,2.6rem)}
+  .sub p{color:var(--muted);max-width:54ch;margin:16px auto 0}
+  .sub .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+  .sub input{background:rgba(21,38,60,.6);border:1px solid var(--line);border-radius:4px;color:var(--ivory);
+    padding:.8em 1.1em;font-family:inherit;min-width:260px}
+  .sub input:focus{outline:none;border-color:var(--gold)}
 
-  .light{background:var(--ivory);color:#22303f}
-  .light .eyebrow{color:#9c7e3f}
-  .light .eyebrow::before{background:#9c7e3f}
-  .light .sec-head p{color:#5b6976}
-  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:60px;background:rgba(34,48,63,.12);border:1px solid rgba(34,48,63,.12)}
-  .svc{background:var(--ivory);padding:34px 30px;transition:background .35s var(--ease)}
-  .svc:hover{background:#ECE5D6}
-  .svc .num{font-family:"Fraunces",serif;font-size:.95rem;color:#9c7e3f;letter-spacing:.05em}
-  .svc h3{font-size:1.28rem;margin:14px 0 12px;color:#1d2a38}
-  .svc ul{margin:0;padding:0;list-style:none}
-  .svc li{font-size:.92rem;color:#54616e;padding:5px 0 5px 18px;position:relative}
-  .svc li::before{content:"";position:absolute;left:0;top:13px;width:7px;height:1px;background:#9c7e3f}
+  /* FOOTER */
+  footer{border-top:1px solid var(--line2);padding:50px 0 40px;color:var(--muted);margin-top:0}
+  .foot-grid{display:flex;justify-content:space-between;gap:36px;flex-wrap:wrap}
+  .foot-grid h4{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-family:"Hanken Grotesk",sans-serif;font-weight:600}
+  .foot-grid a,.foot-grid span{display:block;font-size:.9rem;color:var(--ivory-dim);margin-bottom:8px}
+  .foot-grid a:hover{color:var(--gold-soft)}
+  .disclaimer{margin-top:34px;padding-top:22px;border-top:1px solid var(--line2);font-size:.78rem;color:#70808f;max-width:96ch;line-height:1.7}
 
-  .steps{margin-top:60px;border-top:1px solid var(--line)}
-  .step{display:grid;grid-template-columns:90px 1fr;gap:30px;padding:38px 0;border-bottom:1px solid var(--line);align-items:start;transition:padding-left .4s var(--ease)}
-  .step:hover{padding-left:10px}
-  .step .sn{font-family:"Fraunces",serif;font-size:2.4rem;color:var(--gold);line-height:1}
-  .step h3{font-size:1.55rem;margin-bottom:10px}
-  .step p{color:var(--muted);margin:0;max-width:64ch}
+  /* MODAL */
+  .modal{position:fixed;inset:0;z-index:80;background:rgba(6,12,20,.78);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:38px 16px;overflow:auto}
+  .modal[hidden]{display:none}
+  .modal-in{position:relative;max-width:780px;width:100%;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:48px clamp(22px,4vw,56px);margin:auto}
+  #mClose{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--ivory);cursor:pointer;font-size:1.2rem}
+  #mClose:hover{border-color:var(--gold);color:var(--gold)}
+  .art h1{font-size:clamp(1.7rem,1.2rem + 1.6vw,2.5rem);margin-bottom:10px}
+  .art .meta{color:var(--muted);font-size:.82rem;margin-bottom:8px}
+  .art .back{font-size:.84rem;color:var(--gold);cursor:pointer;display:inline-block;margin-bottom:18px}
+  .art h3{font-family:"Fraunces",serif;font-size:1.3rem;margin:24px 0 8px;color:var(--ivory)}
+  .art p{color:var(--ivory-dim);margin:0 0 14px}
+  .art ul{color:var(--ivory-dim);padding-left:20px;margin:0 0 14px}
+  .art .src{margin-top:22px}
+  .art .src a{color:var(--teal);font-size:.9rem}
+  .art .disc{margin-top:22px;padding-top:16px;border-top:1px solid var(--line2);font-size:.78rem;color:#70808f;line-height:1.7}
 
-  .intel{display:grid;grid-template-columns:.95fr 1.05fr;gap:54px;align-items:center;margin-top:24px}
-  .brief{border:1px solid var(--line);border-radius:6px;background:linear-gradient(180deg,rgba(22,38,60,.85),rgba(15,28,46,.6));padding:8px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
-  .brief-bar{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line)}
-  .dot{width:9px;height:9px;border-radius:50%;background:#3a4d66}
-  .brief-bar .t{margin-left:8px;font-size:.78rem;color:var(--muted)}
-  .brief-body{padding:20px 18px;font-size:.9rem}
-  .brief-body .bh{color:var(--gold);font-weight:600;letter-spacing:.06em;font-size:.78rem;text-transform:uppercase;margin:16px 0 8px}
-  .brief-body .bh:first-child{margin-top:0}
-  .brief-body .row{color:var(--ivory-dim);padding:5px 0 5px 16px;position:relative}
-  .brief-body .row::before{content:"";position:absolute;left:0;top:13px;width:8px;height:1px;background:var(--teal)}
-  .brief-body .tag{display:inline-block;font-size:.68rem;color:var(--teal);border:1px solid rgba(94,156,154,.4);border-radius:2px;padding:1px 7px;margin-left:6px;vertical-align:1px}
-
-  .contact{background:linear-gradient(180deg,var(--ink),#0b1622)}
-  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:54px;margin-top:24px}
-  .field{margin-bottom:18px}
-  .field label{display:block;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-  .field input,.field textarea{width:100%;background:rgba(22,38,60,.5);border:1px solid var(--line);border-radius:3px;color:var(--ivory);padding:13px 15px;font-family:inherit;font-size:.98rem;transition:border-color .3s}
-  .field input:focus,.field textarea:focus{outline:none;border-color:var(--gold)}
-  .field textarea{min-height:120px;resize:vertical}
-  .assure{display:flex;gap:14px;align-items:flex-start;margin-top:22px;font-size:.86rem;color:var(--muted)}
-  .assure svg{flex:0 0 auto;color:var(--gold);margin-top:2px}
-
-  .art-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .art-card{text-align:left;border:1px solid var(--line);border-radius:6px;background:rgba(22,38,60,.4);
-    padding:24px 22px;cursor:pointer;color:inherit;font:inherit;display:flex;flex-direction:column;gap:10px;
-    transition:transform .35s var(--ease),border-color .35s,background .35s}
-  .art-card:hover{transform:translateY(-4px);border-color:var(--gold);background:rgba(22,38,60,.7)}
-  .art-card .d{font-size:.76rem;color:var(--muted);letter-spacing:.04em}
-  .art-card h3{font-size:1.2rem}
-  .art-card p{margin:0;color:var(--muted);font-size:.92rem}
-  .art-card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
-  .art-card .tg{font-size:.66rem;color:var(--teal);border:1px solid rgba(94,156,154,.4);border-radius:2px;padding:1px 7px}
-  .art-modal{position:fixed;inset:0;z-index:80;background:rgba(7,14,24,.74);backdrop-filter:blur(6px);
-    display:flex;align-items:flex-start;justify-content:center;padding:40px 18px;overflow:auto}
-  .art-modal[hidden]{display:none}
-  .art-modal-inner{position:relative;max-width:760px;width:100%;background:var(--ink-2);border:1px solid var(--line);
-    border-radius:8px;padding:46px clamp(22px,4vw,52px);margin:auto}
-  #artClose{position:absolute;top:16px;right:16px;background:none;border:1px solid var(--line);color:var(--ivory);
-    width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1.2rem;line-height:1}
-  #artClose:hover{border-color:var(--gold);color:var(--gold)}
-  .art-body h1{font-size:clamp(1.7rem,1.2rem + 1.6vw,2.4rem);margin-bottom:8px}
-  .art-body .meta{color:var(--muted);font-size:.82rem;margin-bottom:24px}
-  .art-body h3{font-family:"Fraunces",serif;font-weight:500;font-size:1.25rem;margin:24px 0 8px;color:var(--ivory)}
-  .art-body p{color:var(--ivory-dim);margin:0 0 14px}
-  .art-body ul{color:var(--ivory-dim);padding-left:20px;margin:0 0 14px}
-  .art-body .disc{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-size:.78rem;color:#74808f;line-height:1.7}
-
-  footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--muted)}
-  .foot-grid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
-  .disclaimer{margin-top:34px;padding-top:24px;border-top:1px solid var(--line);font-size:.78rem;color:#74808f;max-width:92ch;line-height:1.7}
-
-  .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
-  .reveal.in{opacity:1;transform:none}
-  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
-
-  @media (max-width:960px){
-    .hero-grid,.intel,.contact-grid{grid-template-columns:1fr}
-    .horizon-card{order:-1}
-    .pillars,.svc-grid{grid-template-columns:1fr 1fr}
-    .strip .wrap{grid-template-columns:1fr 1fr}
-    .stat:nth-child(3){border-left:0;padding-left:0}
+  @media (max-width:1000px){
+    nav.cats{display:none}.menu-btn{display:block}
+    .stats .wrap{grid-template-columns:1fr 1fr}.st:nth-child(3){border-left:0}
+    .feed{grid-template-columns:1fr 1fr}.card.feat{grid-column:span 2}
   }
-  @media (max-width:680px){
-    .nav-links{display:none}.nav-toggle{display:block}
-    .nav-links.open{display:flex;position:absolute;top:78px;left:0;right:0;flex-direction:column;background:rgba(15,28,46,.97);border-bottom:1px solid var(--line);padding:24px 28px;gap:20px}
-    .pillars,.svc-grid,.strip .wrap{grid-template-columns:1fr}
-    .stat{border-left:0;padding-left:0}
-    .step{grid-template-columns:1fr;gap:8px}
-    section.block{padding:76px 0}
+  @media (max-width:620px){
+    .feed{grid-template-columns:1fr}.card.feat{grid-column:span 1;flex-direction:column;align-items:flex-start}
+    .card.feat .fbadge{width:100%;height:110px}
+    .stats .wrap{grid-template-columns:1fr 1fr}
   }
   :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
 </style>
 </head>
 <body>
 
-<header class="nav" id="nav">
-  <div class="wrap bar">
-    <a class="brand" href="#top" aria-label="Family Office">
-      <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-        <circle cx="20" cy="20" r="18.5" stroke="#C3A368"/>
-        <path d="M20 7v26M11 14c0 7 4 12 9 12s9-5 9-12" stroke="#C3A368" stroke-width="1.4"/>
-        <circle cx="20" cy="7" r="2.2" fill="#5E9C9A"/>
-      </svg>
+<!-- TICKER -->
+<div class="ticker" aria-label="Harga crypto langsung"><div class="ticker-track" id="ticker"></div></div>
+
+<!-- HEADER -->
+<header class="site">
+  <div class="wrap hbar">
+    <a class="brand" href="#top">
+      <svg class="mk" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="18.5" stroke="#C3A368"/><path d="M20 7v26M11 14c0 7 4 12 9 12s9-5 9-12" stroke="#C3A368" stroke-width="1.4"/><circle cx="20" cy="7" r="2.2" fill="#5FB0AC"/></svg>
       <span>Family&nbsp;Office</span>
     </a>
-    <nav class="nav-links" id="navLinks">
-      <a href="#pendekatan">Pendekatan</a>
-      <a href="#pasar">Pasar</a>
-      <a href="#proses">Proses</a>
-      <a href="#wawasan">Wawasan</a>
-      <a class="btn" href="#kontak">Mulai konsultasi</a>
-    </nav>
-    <button class="nav-toggle" id="navToggle" aria-label="Buka menu" aria-expanded="false">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-    </button>
+    <nav class="cats" id="cats"></nav>
+    <div class="hcta">
+      <a class="btn" href="#langganan">Berlangganan</a>
+      <a class="btn-solid btn" href="#" id="tgLink">Telegram ↗</a>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   </div>
 </header>
 
-<main id="top">
-
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div class="reveal">
-      <span class="eyebrow">Keuangan · Saham · Crypto · DeFi</span>
-      <h1 style="margin-top:22px">Kelola kekayaan di <em>pasar yang terus bergerak.</em></h1>
-      <p class="lead">Satu pendekatan menyeluruh untuk keuangan, saham, crypto, dan DeFi — strategi, diversifikasi lintas aset, dan disiplin risiko untuk pertumbuhan jangka panjang.</p>
-      <div class="cta-row">
-        <a class="btn btn-solid" href="#kontak">Mulai konsultasi</a>
-        <a class="btn" href="#pendekatan">Pelajari pendekatan kami</a>
-      </div>
-      <p class="hero-note">Independen dan berbasis riset. Fokus kami pada keputusan yang tepat untuk Anda — bukan menjual produk atau mengejar hype.</p>
-    </div>
-
-    <div class="horizon-card reveal" aria-label="Spektrum aset">
-      <h3>Spektrum Aset</h3>
-      <div class="gen-line">
-        <span class="gen-node" style="left:8%"  data-label="Saham"  data-year="Tradisional"></span>
-        <span class="gen-node" style="left:50%" data-label="Crypto" data-year="Digital"></span>
-        <span class="gen-node" style="left:92%" data-label="DeFi"   data-year="On-chain"></span>
-      </div>
-      <div class="gen-cap">
-        <span><b>Cakupan</b> Multi-aset</span>
-        <span><b>Pemantauan</b> 24/7</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="strip">
+<!-- MARKET STATS -->
+<div class="stats" id="top">
   <div class="wrap">
-    <div class="stat reveal"><div class="n">4</div><div class="l">Fokus: keuangan, saham, crypto, DeFi</div></div>
-    <div class="stat reveal"><div class="n">24/7</div><div class="l">Pemantauan pasar &amp; risiko</div></div>
-    <div class="stat reveal"><div class="n">100<span>%</span></div><div class="l">Independen &amp; berbasis riset</div></div>
-    <div class="stat reveal"><div class="n">0</div><div class="l">Hype — keputusan berbasis data</div></div>
+    <div class="st"><div class="k">Kripto Market Cap</div><div class="v num" id="mc">—</div><div class="ch num" id="mcc">memuat…</div></div>
+    <div class="st"><div class="k">BTC Dominance</div><div class="v num" id="dom">—</div><div class="ch num">dari total market cap</div></div>
+    <div class="st"><div class="k">Volume 24 Jam</div><div class="v num" id="vol">—</div><div class="ch num">seluruh pasar kripto</div></div>
+    <div class="st"><div class="k">Pembaruan</div><div class="v num" id="upd">—</div><div class="ch num">harga &amp; berita otomatis</div></div>
   </div>
 </div>
 
-<section class="block" id="pendekatan">
+<!-- INTRO -->
+<section class="wrap intro">
+  <span class="eyebrow">Intelijen Pasar Harian</span>
+  <h1>Saham, Crypto, DeFi &amp; Keuangan — diringkas AI tiap hari.</h1>
+  <p>Menyaring kebisingan pasar menjadi sinyal: apa yang penting hari ini, mengapa, dan apa yang perlu Anda perhatikan. Disusun otomatis dari pemantauan berita sepanjang waktu.</p>
+</section>
+
+<!-- CHIPS + FEED -->
+<section class="wrap">
+  <div class="chips" id="chips"></div>
+  <div class="sec-title"><h2>Terbaru</h2><span id="count"></span></div>
+  <div class="feed" id="feed"></div>
+  <div class="more-row" id="moreRow" hidden><button class="btn" id="moreBtn">Muat lebih banyak</button></div>
+</section>
+
+<!-- SUBSCRIBE -->
+<section class="sub" id="langganan">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Pendekatan</span>
-      <h2>Tiga prinsip yang memandu setiap keputusan.</h2>
-      <p>Pasar tradisional dan aset digital punya peluang sekaligus risiko. Kami menimbang keduanya dengan kepala dingin, lewat tiga prinsip ini.</p>
+    <span class="eyebrow" style="color:var(--gold)">Ikuti update harian</span>
+    <h2 style="margin-top:14px">Ringkasan pasar pilihan, langsung ke Anda.</h2>
+    <p>Saham, crypto, DeFi, dan keuangan — disaring tiap hari. Gratis. Atau gabung channel Telegram untuk update tercepat.</p>
+    <div class="row">
+      <input type="email" id="subEmail" placeholder="email@anda.com" aria-label="Email" />
+      <button class="btn-solid btn" id="subBtn">Berlangganan</button>
+      <a class="btn" href="#" id="tgLink2">Channel Telegram ↗</a>
     </div>
-    <div class="pillars">
-      <article class="pillar reveal">
-        <svg class="pi" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M5 26l7-8 5 5 9-12"/><path d="M26 11h-5M26 11v5"/></svg>
-        <h3>Strategi</h3>
-        <p>Tujuan dan profil risiko Anda lebih dulu, baru instrumen. Rencana yang jelas mengalahkan reaksi terhadap kebisingan pasar harian.</p>
-      </article>
-      <article class="pillar reveal">
-        <svg class="pi" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="10" cy="11" r="5"/><circle cx="21" cy="20" r="6"/></svg>
-        <h3>Diversifikasi</h3>
-        <p>Menyebar eksposur lintas saham, obligasi, kas, crypto, dan DeFi sesuai porsi yang wajar — agar tidak ada satu guncangan pun yang menentukan segalanya.</p>
-      </article>
-      <article class="pillar reveal">
-        <svg class="pi" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M16 3l11 5v7c0 7-5 12-11 14C10 27 5 22 5 15V8l11-5z"/><path d="M11 16l3.5 3.5L21 13"/></svg>
-        <h3>Disiplin Risiko</h3>
-        <p>Ukuran posisi, likuiditas, custody, dan kewaspadaan terhadap penipuan. Melindungi modal adalah syarat pertama sebelum menumbuhkannya.</p>
-      </article>
-    </div>
+    <p id="subNote" style="min-height:1.2em;font-size:.85rem;margin-top:14px"></p>
   </div>
 </section>
 
-<section class="block light" id="pasar">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Cakupan Pasar</span>
-      <h2>Dari saham hingga DeFi, dalam satu pandangan.</h2>
-      <p>Kami membantu Anda memahami dan menavigasi seluruh spektrum aset modern secara terkoordinasi dan konsisten.</p>
-    </div>
-    <div class="svc-grid">
-      <article class="svc reveal"><div class="num">01</div><h3>Saham &amp; Pasar Modal</h3>
-        <ul><li>Saham domestik &amp; global</li><li>Analisis fundamental &amp; teknikal</li><li>Dividen &amp; pertumbuhan</li><li>Reksa dana &amp; ETF</li></ul></article>
-      <article class="svc reveal"><div class="num">02</div><h3>Crypto &amp; Aset Digital</h3>
-        <ul><li>Bitcoin, Ethereum &amp; altcoin</li><li>Strategi alokasi &amp; rebalancing</li><li>Custody &amp; keamanan dompet</li><li>Manajemen volatilitas</li></ul></article>
-      <article class="svc reveal"><div class="num">03</div><h3>DeFi &amp; On-chain</h3>
-        <ul><li>Staking &amp; yield</li><li>Likuiditas &amp; protokol</li><li>Stablecoin &amp; risiko depeg</li><li>Risiko smart contract</li></ul></article>
-      <article class="svc reveal"><div class="num">04</div><h3>Manajemen Keuangan</h3>
-        <ul><li>Perencanaan keuangan</li><li>Alokasi aset &amp; arus kas</li><li>Tujuan jangka pendek &amp; panjang</li><li>Dana darurat &amp; proteksi</li></ul></article>
-      <article class="svc reveal"><div class="num">05</div><h3>Riset &amp; Analisis Pasar</h3>
-        <ul><li>Makro &amp; suku bunga</li><li>Sinyal &amp; sentimen</li><li>Valuasi &amp; tema investasi</li><li>Ringkasan harian</li></ul></article>
-      <article class="svc reveal"><div class="num">06</div><h3>Risiko &amp; Keamanan</h3>
-        <ul><li>Volatilitas &amp; likuiditas</li><li>Custody &amp; counterparty</li><li>Scam, phishing &amp; deepfake</li><li>Diversifikasi &amp; mitigasi</li></ul></article>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="proses">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Proses</span>
-      <h2>Empat tahap, dari mengenal hingga menjaga.</h2>
-      <p>Kerja sama kita berkembang dalam langkah yang tertib — masing-masing dengan tujuan dan hasil yang jelas.</p>
-    </div>
-    <div class="steps">
-      <article class="step reveal"><div class="sn">01</div><div><h3>Pengenalan</h3>
-        <p>Memahami tujuan keuangan, horizon waktu, toleransi risiko, dan pengalaman Anda di pasar — tanpa komitmen.</p></div></article>
-      <article class="step reveal"><div class="sn">02</div><div><h3>Strategi &amp; Alokasi</h3>
-        <p>Menyusun rencana alokasi lintas saham, obligasi, kas, crypto, dan DeFi sesuai porsi yang sesuai dengan profil Anda.</p></div></article>
-      <article class="step reveal"><div class="sn">03</div><div><h3>Eksekusi</h3>
-        <p>Menerjemahkan rencana menjadi langkah konkret: pemilihan instrumen, platform, custody, dan disiplin masuk/keluar.</p></div></article>
-      <article class="step reveal"><div class="sn">04</div><div><h3>Pemantauan</h3>
-        <p>Peninjauan berkala, briefing pasar, evaluasi risiko &amp; peluang, dan penyesuaian seiring perubahan kondisi.</p></div></article>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="wawasan">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Wawasan</span>
-      <h2>Intelijen pasar harian, ringkas dan jernih.</h2>
-      <p>Kami memantau pasar, regulasi, dan risiko sepanjang waktu, lalu menyaringnya menjadi satu ringkasan yang padat — apa yang penting hari ini dan mengapa.</p>
-    </div>
-    <div class="intel">
-      <div class="reveal">
-        <p style="color:var(--muted);max-width:46ch">Setiap pagi tersaji <b style="color:var(--ivory)">Daily Market Brief</b> — menyaring kebisingan menjadi sinyal di seluruh kelas aset: saham, makro, crypto, dan DeFi.</p>
-        <ul style="list-style:none;padding:0;margin:26px 0 0;color:var(--muted)">
-          <li style="padding:8px 0 8px 20px;position:relative"><span style="position:absolute;left:0;top:15px;width:9px;height:1px;background:var(--gold)"></span>Prioritas terurut: penting dahulu, sisanya menyusul</li>
-          <li style="padding:8px 0 8px 20px;position:relative"><span style="position:absolute;left:0;top:15px;width:9px;height:1px;background:var(--gold)"></span>Memisahkan fakta, analisis, dan opini</li>
-          <li style="padding:8px 0 8px 20px;position:relative"><span style="position:absolute;left:0;top:15px;width:9px;height:1px;background:var(--gold)"></span>Penanda risiko, peluang, dan langkah tindak lanjut</li>
-        </ul>
-      </div>
-      <div class="brief reveal" aria-label="Contoh ringkasan harian">
-        <div class="brief-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">Daily Market Brief</span></div>
-        <div class="brief-body">
-          <div class="bh">Ringkasan</div>
-          <div class="row">Sinyal suku bunga bank sentral menekan saham &amp; obligasi <span class="tag">Makro</span></div>
-          <div class="row">Rotasi sektor di pasar saham domestik <span class="tag">Saham</span></div>
-          <div class="bh">Aset Digital</div>
-          <div class="row">Pergerakan BTC/ETH &amp; aliran dana <span class="tag">Crypto</span></div>
-          <div class="row">Perubahan imbal hasil staking di protokol utama <span class="tag">DeFi</span></div>
-          <div class="bh">Peringatan Risiko</div>
-          <div class="row">Modus penipuan berbasis AI menargetkan investor <span class="tag">Tinggi</span></div>
-        </div>
-      </div>
-    </div>
-    <div id="artikelWrap" class="reveal" hidden style="margin-top:66px">
-      <div class="eyebrow" style="margin-bottom:18px">Artikel Terbaru</div>
-      <div id="artikelGrid" class="art-grid"></div>
-    </div>
-  </div>
-</section>
-
-<section class="block contact" id="kontak">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Mulai konsultasi</span>
-      <h2>Mari bicara tentang tujuan keuangan Anda.</h2>
-      <p>Percakapan pertama bersifat rahasia dan tanpa komitmen — diarahkan untuk memahami kebutuhan Anda, bukan menjual produk.</p>
-    </div>
-    <div class="contact-grid">
-      <form class="reveal" id="contactForm" novalidate>
-        <div class="field"><label for="nama">Nama</label><input id="nama" name="nama" type="text" autocomplete="name" required /></div>
-        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required /></div>
-        <div class="field"><label for="topik">Yang ingin dibahas</label><input id="topik" name="topik" type="text" placeholder="mis. saham, crypto, DeFi, perencanaan keuangan" /></div>
-        <div class="field"><label for="pesan">Pesan</label><textarea id="pesan" name="pesan" placeholder="Ceritakan singkat situasi dan tujuan Anda."></textarea></div>
-        <button class="btn btn-solid" type="submit" style="width:100%;justify-content:center">Kirim permintaan</button>
-        <p id="formNote" role="status" style="font-size:.84rem;color:var(--muted);margin:14px 0 0;min-height:1.2em"></p>
-      </form>
-      <div class="reveal">
-        <p style="color:var(--muted);max-width:42ch">Anda akan terhubung dengan tim kami untuk menjadwalkan diskusi pendahuluan, langsung maupun daring, pada waktu yang nyaman bagi Anda.</p>
-        <div class="assure">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-5"/></svg>
-          <span><b style="color:var(--ivory)">Kerahasiaan penuh.</b> Informasi Anda dijaga ketat dan tidak dibagikan tanpa persetujuan.</span>
-        </div>
-        <div class="assure">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg>
-          <span><b style="color:var(--ivory)">Independen &amp; berbasis riset.</b> Tanpa hype, tanpa janji untung pasti.</span>
-        </div>
-        <p style="margin-top:30px;color:var(--ivory-dim)">halo@namadomainanda.com &nbsp;·&nbsp; +62 21 0000 0000</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-</main>
-
+<!-- FOOTER -->
 <footer>
   <div class="wrap">
     <div class="foot-grid">
-      <div style="max-width:36ch">
-        <a class="brand" href="#top" style="margin-bottom:14px"><svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="18.5" stroke="#C3A368"/><path d="M20 7v26M11 14c0 7 4 12 9 12s9-5 9-12" stroke="#C3A368" stroke-width="1.4"/><circle cx="20" cy="7" r="2.2" fill="#5E9C9A"/></svg><span>Family&nbsp;Office</span></a>
-        <p style="font-size:.9rem;margin:6px 0 0">Pengelolaan kekayaan lintas pasar — keuangan, saham, crypto, dan DeFi — dengan strategi, diversifikasi, dan disiplin risiko.</p>
+      <div style="max-width:34ch">
+        <a class="brand" href="#top" style="margin-bottom:12px"><svg class="mk" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18.5" stroke="#C3A368"/><path d="M20 7v26M11 14c0 7 4 12 9 12s9-5 9-12" stroke="#C3A368" stroke-width="1.4"/><circle cx="20" cy="7" r="2.2" fill="#5FB0AC"/></svg><span>Family&nbsp;Office</span></a>
+        <p style="font-size:.9rem">Media intelijen pasar untuk Indonesia — saham, crypto, DeFi, dan keuangan. Berita diringkas AI tiap hari.</p>
       </div>
-      <div style="display:flex;gap:54px;flex-wrap:wrap">
-        <div>
-          <div class="eyebrow" style="margin-bottom:14px">Jelajah</div>
-          <div style="display:flex;flex-direction:column;gap:9px;font-size:.92rem">
-            <a href="#pendekatan">Pendekatan</a><a href="#pasar">Pasar</a><a href="#proses">Proses</a><a href="#wawasan">Wawasan</a>
-          </div>
-        </div>
-        <div>
-          <div class="eyebrow" style="margin-bottom:14px">Kontak</div>
-          <div style="display:flex;flex-direction:column;gap:9px;font-size:.92rem">
-            <a href="#kontak">Mulai konsultasi</a><span>halo@namadomainanda.com</span><span>Jakarta, Indonesia</span>
-          </div>
-        </div>
+      <div><h4>Kanal</h4>
+        <a data-cat="Saham">Saham</a><a data-cat="Crypto">Crypto</a><a data-cat="DeFi">DeFi</a><a data-cat="Makro">Makro</a><a data-cat="Regulation">Regulasi</a>
+      </div>
+      <div><h4>Ikuti</h4>
+        <a href="#" id="tgLink3">Telegram</a><a href="#">X / Twitter</a><a href="#">LinkedIn</a><a href="#">Instagram</a>
       </div>
     </div>
     <p class="disclaimer">
-      Informasi pada situs ini bersifat umum dan edukatif, bukan nasihat investasi, keuangan, hukum, atau pajak, dan tidak boleh dijadikan dasar tunggal pengambilan keputusan. Investasi pada saham, crypto, dan DeFi mengandung risiko tinggi, termasuk kemungkinan kehilangan sebagian atau seluruh modal; aset kripto sangat fluktuatif dan sebagian protokol DeFi belum sepenuhnya teruji atau diatur. Lakukan riset mandiri dan konsultasikan dengan penasihat profesional berlisensi sebelum mengambil keputusan. Kinerja masa lalu tidak menjamin hasil di masa depan.
+      Konten di situs ini bersifat informatif dan edukatif, bukan nasihat keuangan, investasi, hukum, atau pajak. Investasi pada saham, crypto, dan DeFi mengandung risiko tinggi, termasuk kemungkinan kehilangan sebagian atau seluruh modal; aset kripto sangat fluktuatif dan sebagian protokol DeFi belum sepenuhnya teruji atau diatur. Data harga disediakan oleh pihak ketiga dan dapat tertunda. Lakukan riset mandiri dan konsultasikan dengan penasihat profesional berlisensi sebelum mengambil keputusan.
       <br/><br/>© <span id="yr"></span> Family Office. Seluruh hak cipta.
     </p>
   </div>
 </footer>
 
-<div id="artModal" class="art-modal" hidden role="dialog" aria-modal="true" aria-label="Artikel">
-  <div class="art-modal-inner">
-    <button id="artClose" aria-label="Tutup">&times;</button>
-    <div id="artContent"></div>
-  </div>
+<!-- MODAL -->
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true">
+  <div class="modal-in"><button id="mClose" aria-label="Tutup">&times;</button><div id="mBody"></div></div>
 </div>
 
 <script>
+  // ====== KONFIGURASI ======
+  const TELEGRAM_URL = "https://t.me/"; // ganti dengan link channel Telegram Anda
+  const COINS = [
+    {id:"bitcoin",s:"BTC"},{id:"ethereum",s:"ETH"},{id:"binancecoin",s:"BNB"},
+    {id:"solana",s:"SOL"},{id:"ripple",s:"XRP"},{id:"cardano",s:"ADA"},
+    {id:"dogecoin",s:"DOGE"},{id:"tron",s:"TRX"},{id:"chainlink",s:"LINK"},{id:"avalanche-2",s:"AVAX"}
+  ];
   document.getElementById('yr').textContent = new Date().getFullYear();
-  const nav = document.getElementById('nav');
-  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
-  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
-  const toggle = document.getElementById('navToggle'), links = document.getElementById('navLinks');
-  toggle.addEventListener('click', () => { const o = links.classList.toggle('open'); toggle.setAttribute('aria-expanded', o?'true':'false'); });
-  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { links.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }));
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const items = document.querySelectorAll('.reveal');
-  if (reduce || !('IntersectionObserver' in window)) { items.forEach(el => el.classList.add('in')); }
-  else {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          const sibs = [...e.target.parentElement.children].filter(c => c.classList.contains('reveal'));
-          e.target.style.transitionDelay = Math.min(sibs.indexOf(e.target),5)*70 + 'ms';
-          e.target.classList.add('in'); io.unobserve(e.target);
-        }
-      });
-    }, {threshold:.16, rootMargin:'0px 0px -8% 0px'});
-    items.forEach(el => io.observe(el));
-  }
-  const form = document.getElementById('contactForm'), note = document.getElementById('formNote');
-  form.addEventListener('submit', (ev) => {
-    ev.preventDefault();
-    const nama = form.nama.value.trim(), email = form.email.value.trim();
-    if (!nama || !email) { note.textContent = 'Mohon isi nama dan email terlebih dahulu.'; return; }
-    const topik = form.topik.value.trim() || 'Konsultasi', pesan = form.pesan.value.trim();
-    const body = encodeURIComponent(`Nama: ${nama}\nEmail: ${email}\nTopik: ${topik}\n\n${pesan}`);
-    const subject = encodeURIComponent(`Permintaan konsultasi — ${nama}`);
-    note.textContent = 'Membuka aplikasi email Anda…';
-    window.location.href = `mailto:halo@namadomainanda.com?subject=${subject}&body=${body}`;
-  });
+  ['tgLink','tgLink2','tgLink3'].forEach(id=>{const a=document.getElementById(id); if(a) a.href=TELEGRAM_URL;});
 
-  // Artikel harian dari posts.json (ditulis otomatis oleh AI/Orchestrator)
-  (function(){
-    const wrap=document.getElementById('artikelWrap'), grid=document.getElementById('artikelGrid');
-    const modal=document.getElementById('artModal'), content=document.getElementById('artContent');
-    const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    fetch('posts.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(posts=>{
-      if(!Array.isArray(posts)||!posts.length) return;
-      wrap.hidden=false; grid.innerHTML='';
-      posts.slice(0,6).forEach(p=>{
-        const tags=(p.tags||[]).map(t=>`<span class="tg">${esc(t)}</span>`).join('');
-        const b=document.createElement('button'); b.className='art-card';
-        b.innerHTML=`<span class="d">${esc(p.date||'')}</span><h3>${esc(p.title||'')}</h3><p>${esc(p.summary||'')}</p><span class="tags">${tags}</span>`;
-        b.addEventListener('click',()=>openArt(p)); grid.appendChild(b);
+  const fmtUsd = n => n>=1 ? '$'+n.toLocaleString('en-US',{maximumFractionDigits:2}) : '$'+n.toLocaleString('en-US',{maximumFractionDigits:6});
+  const fmtBig = n => { if(n>=1e12) return '$'+(n/1e12).toFixed(2)+' T'; if(n>=1e9) return '$'+(n/1e9).toFixed(2)+' B'; if(n>=1e6) return '$'+(n/1e6).toFixed(2)+' M'; return '$'+n.toLocaleString('en-US'); };
+  const sign = c => (c>=0?'+':'')+c.toFixed(2)+'%';
+
+  // ====== TICKER HARGA (CoinGecko gratis) — berjalan ke kiri ======
+  function renderTicker(items){
+    const html = items.join('');
+    // gandakan agar marquee mulus & selalu penuh selebar layar
+    document.getElementById('ticker').innerHTML = html + html + html + html;
+  }
+  function placeholderTicker(){
+    return COINS.map(c=>`<span class="tk"><b>${c.s}</b><span class="p">…</span></span>`);
+  }
+  // tampilkan langsung saat halaman dibuka (tidak menunggu data)
+  renderTicker(placeholderTicker());
+
+  async function loadTicker(){
+    try{
+      const ids = COINS.map(c=>c.id).join(',');
+      const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`,{cache:'no-store'});
+      if(!r.ok) throw 0;
+      const d = await r.json();
+      const items = COINS.map(c=>{
+        const o=d[c.id]; if(!o) return `<span class="tk"><b>${c.s}</b><span class="p">…</span></span>`;
+        const ch=o.usd_24h_change||0, cls=ch>=0?'up':'down';
+        return `<span class="tk"><b>${c.s}</b><span class="p">${fmtUsd(o.usd)}</span><span class="c ${cls}">${sign(ch)}</span></span>`;
       });
-    }).catch(()=>{});
-    function openArt(p){
-      const tags=(p.tags||[]).map(t=>`<span class="tg">${esc(t)}</span>`).join(' ');
-      content.innerHTML=`<div class="art-body"><h1>${esc(p.title||'')}</h1>`+
-        `<div class="meta">${esc(p.date||'')} ${tags?'· '+tags:''}</div>`+
-        (p.html||('<p>'+esc(p.summary||'')+'</p>'))+
-        `<div class="disc">Bukan nasihat investasi/keuangan/pajak/hukum. Investasi saham, crypto, dan DeFi berisiko tinggi, termasuk kehilangan modal. Lakukan riset mandiri.</div></div>`;
-      modal.hidden=false; document.body.style.overflow='hidden';
-    }
-    function closeArt(){modal.hidden=true; document.body.style.overflow='';}
-    document.getElementById('artClose').addEventListener('click',closeArt);
-    modal.addEventListener('click',e=>{if(e.target===modal)closeArt();});
-    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)closeArt();});
-  })();
+      renderTicker(items);
+    }catch(e){ /* biarkan tampilan terakhir tetap berjalan */ }
+  }
+
+  // ====== STATISTIK GLOBAL ======
+  async function loadGlobal(){
+    try{
+      const r = await fetch('https://api.coingecko.com/api/v3/global',{cache:'no-store'});
+      if(!r.ok) throw 0;
+      const g = (await r.json()).data;
+      document.getElementById('mc').textContent = fmtBig(g.total_market_cap.usd);
+      const ch = g.market_cap_change_percentage_24h_usd||0;
+      const mcc = document.getElementById('mcc'); mcc.textContent = sign(ch)+' (24j)'; mcc.className = 'ch num '+(ch>=0?'up':'down');
+      document.getElementById('dom').textContent = (g.market_cap_percentage.btc||0).toFixed(1)+'%';
+      document.getElementById('vol').textContent = fmtBig(g.total_volume.usd);
+      document.getElementById('upd').textContent = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+    }catch(e){}
+  }
+
+  function refresh(){ loadTicker(); loadGlobal(); }
+  refresh(); setInterval(refresh, 60000); // perbarui tiap 60 detik
+
+  // ====== FEED ARTIKEL (posts.json dari AI/Orchestrator) ======
+  const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let POSTS = [], activeCat = 'Semua', shown = 7;
+  const CAT_LABEL = {Saham:'Saham',Crypto:'Crypto',DeFi:'DeFi',Makro:'Makro',Regulation:'Regulasi',Macro:'Makro',Tax:'Pajak',Risk:'Risiko'};
+
+  function catsOf(p){ return (p.tags||[]).map(t=>t); }
+  function matchCat(p){ if(activeCat==='Semua') return true; return catsOf(p).some(t=>t.toLowerCase()===activeCat.toLowerCase() || (CAT_LABEL[t]||'').toLowerCase()===activeCat.toLowerCase()); }
+
+  function renderChips(){
+    const set = new Set(['Semua']); POSTS.forEach(p=>catsOf(p).forEach(t=>set.add(t)));
+    const chips = document.getElementById('chips'); chips.innerHTML='';
+    [...set].slice(0,10).forEach(c=>{
+      const b=document.createElement('button'); b.className='chip'+(c===activeCat?' active':''); b.textContent=CAT_LABEL[c]||c;
+      b.onclick=()=>{activeCat=c; shown=7; renderChips(); renderFeed();}; chips.appendChild(b);
+    });
+    // nav kategori atas
+    const nav=document.getElementById('cats'); nav.innerHTML='';
+    [...set].slice(0,7).forEach(c=>{const a=document.createElement('a');a.textContent=CAT_LABEL[c]||c;a.onclick=()=>{activeCat=c;shown=7;renderChips();renderFeed();window.scrollTo({top:document.querySelector('.chips').offsetTop-80,behavior:'smooth'});};nav.appendChild(a);});
+  }
+
+  function card(p, feat){
+    const b=document.createElement('button'); b.className='card'+(feat?' feat':'');
+    const tags=(p.tags||[]).slice(0,3).map(t=>`<span class="tg">${esc(CAT_LABEL[t]||t)}</span>`).join('');
+    const inner=`<div class="${feat?'ftxt':''}"><div class="d">${esc(p.date||'')}</div><h3>${esc(p.title||'')}</h3><p>${esc(p.summary||'')}</p><div class="tags">${tags}</div></div>`;
+    b.innerHTML = feat ? `<div class="fbadge"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#C3A368" stroke-width="1.3"><path d="M3 17l6-6 4 4 7-8"/><path d="M21 7h-5M21 7v5"/></svg></div>${inner}` : inner;
+    b.onclick=()=>openArt(p); return b;
+  }
+
+  function renderFeed(){
+    const feed=document.getElementById('feed'); feed.innerHTML='';
+    const list = POSTS.filter(matchCat);
+    document.getElementById('count').textContent = list.length ? `${list.length} artikel` : '';
+    if(!list.length){ feed.innerHTML='<div class="empty" style="grid-column:1/-1">Belum ada artikel. Artikel akan muncul otomatis setiap hari setelah sistem berjalan.</div>'; document.getElementById('moreRow').hidden=true; return; }
+    const vis=list.slice(0,shown);
+    vis.forEach((p,i)=>feed.appendChild(card(p, i===0)));
+    document.getElementById('moreRow').hidden = list.length<=shown;
+  }
+
+  function openArt(p){
+    const tags=(p.tags||[]).map(t=>`<span class="tg">${esc(CAT_LABEL[t]||t)}</span>`).join(' ');
+    const src = p.source ? `<div class="src"><a href="${esc(p.source)}" target="_blank" rel="noopener">Baca sumber asli ↗</a></div>` : '';
+    document.getElementById('mBody').innerHTML =
+      `<div class="art"><span class="back" id="mBack">← Kembali ke daftar</span>`+
+      `<h1>${esc(p.title||'')}</h1><div class="meta">${esc(p.date||'')} ${tags?'· '+tags:''}</div>`+
+      (p.html||('<p>'+esc(p.summary||'')+'</p>'))+ src +
+      `<div class="disc">Artikel ini ringkasan editorial berbahasa Indonesia yang disusun ulang oleh AI dari pemantauan berita, dan bukan nasihat keuangan/investasi/pajak/hukum. Aset kripto &amp; DeFi berisiko tinggi. Lakukan riset mandiri.</div></div>`;
+    document.getElementById('mBack').onclick=closeArt;
+    document.getElementById('modal').hidden=false; document.body.style.overflow='hidden';
+  }
+  function closeArt(){document.getElementById('modal').hidden=true; document.body.style.overflow='';}
+  document.getElementById('mClose').onclick=closeArt;
+  document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeArt();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('modal').hidden)closeArt();});
+  document.getElementById('moreBtn').onclick=()=>{shown+=6; renderFeed();};
+
+  // footer kanal & menu
+  document.querySelectorAll('.foot-grid a[data-cat]').forEach(a=>a.onclick=(e)=>{e.preventDefault();activeCat=a.dataset.cat;shown=7;renderChips();renderFeed();window.scrollTo({top:document.querySelector('.chips').offsetTop-80,behavior:'smooth'});});
+  document.getElementById('menuBtn').onclick=()=>{window.scrollTo({top:document.querySelector('.chips').offsetTop-80,behavior:'smooth'});};
+
+  // langganan (tanpa backend -> mailto)
+  document.getElementById('subBtn').onclick=()=>{
+    const em=document.getElementById('subEmail').value.trim(), note=document.getElementById('subNote');
+    if(!em){note.textContent='Mohon isi email Anda.';note.style.color='var(--down)';return;}
+    note.textContent='Terima kasih! Membuka aplikasi email untuk konfirmasi…';note.style.color='var(--up)';
+    window.location.href=`mailto:halo@namadomainanda.com?subject=${encodeURIComponent('Berlangganan')}&body=${encodeURIComponent('Saya ingin berlangganan update harian. Email: '+em)}`;
+  };
+
+  // muat artikel
+  fetch('posts.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(posts=>{
+    POSTS = Array.isArray(posts)?posts:[]; renderChips(); renderFeed();
+  }).catch(()=>{ renderChips(); renderFeed(); });
 </script>
 </body>
 </html>
