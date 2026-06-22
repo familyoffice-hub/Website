@@ -70,6 +70,27 @@
   .intro .eyebrow{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
   .intro h1{font-size:clamp(2rem,1.4rem + 2.6vw,3.2rem);margin:14px 0 0;max-width:18ch}
   .intro p{color:var(--muted);margin:16px 0 0;max-width:60ch}
+  /* HERO: panel Artikel Terbaru di kanan */
+  .intro-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center}
+  .intro-left{min-width:0}
+  .intro-latest{border:1px solid var(--line);border-radius:12px;padding:18px 20px 10px;
+    background:linear-gradient(160deg,rgba(21,38,60,.6),rgba(14,26,43,.25))}
+  .il-head{margin-bottom:4px}
+  .il-head .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .il-list{display:flex;flex-direction:column}
+  .il-item{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;font:inherit;color:inherit;
+    padding:13px 0;border-top:1px solid var(--line2);transition:opacity .2s}
+  .il-item:first-child{border-top:0}
+  .il-item:hover{opacity:.74}
+  .il-item .d{font-size:.72rem;color:var(--muted);letter-spacing:.03em}
+  .il-item h4{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:1.04rem;line-height:1.25;margin:4px 0 0;color:var(--ivory)}
+  .il-item .tg{display:inline-block;margin-top:8px}
+  .il-all{display:inline-block;font-size:.78rem;color:var(--gold);padding:12px 0 4px;cursor:pointer}
+  .il-all:hover{color:var(--gold-soft)}
+  @media (max-width:1000px){
+    .intro-grid{grid-template-columns:1fr;gap:30px}
+    .intro-latest{margin-top:6px}
+  }
 
   /* CHIPS */
   .chips{display:flex;gap:10px;flex-wrap:wrap;padding:30px 0 26px}
@@ -179,9 +200,17 @@
 
 <!-- INTRO -->
 <section class="wrap intro">
-  <span class="eyebrow">Intelijen Pasar Harian</span>
-  <h1>Saham, Crypto &amp; Keuangan.</h1>
-  <p>Menyaring kebisingan pasar menjadi sinyal: apa yang penting hari ini, mengapa, dan apa yang perlu Anda perhatikan. Disusun otomatis dari pemantauan berita sepanjang waktu.</p>
+  <div class="intro-grid">
+    <div class="intro-left">
+      <span class="eyebrow">Intelijen Pasar Harian</span>
+      <h1>Saham, Crypto &amp; Keuangan.</h1>
+      <p>Menyaring kebisingan pasar menjadi sinyal: apa yang penting hari ini, mengapa, dan apa yang perlu Anda perhatikan. Disusun otomatis dari pemantauan berita sepanjang waktu.</p>
+    </div>
+    <aside class="intro-latest" id="heroLatest" aria-label="Artikel terbaru">
+      <div class="il-head"><span class="eyebrow">Artikel Terbaru</span></div>
+      <div class="il-list" id="heroLatestList"></div>
+    </aside>
+  </div>
 </section>
 
 <!-- CHIPS + FEED -->
@@ -392,6 +421,23 @@
     document.getElementById('moreRow').hidden = list.length<=shown;
   }
 
+  function renderHeroLatest(){
+    const box=document.getElementById('heroLatest'), list=document.getElementById('heroLatestList');
+    if(!box||!list) return;
+    const top=POSTS.slice(0,3);
+    if(!top.length){ box.style.display='none'; return; }
+    box.style.display=''; list.innerHTML='';
+    top.forEach(p=>{
+      const b=document.createElement('button'); b.className='il-item';
+      const tag=(p.tags&&p.tags[0])?`<span class="tg">${esc(CAT_LABEL[p.tags[0]]||p.tags[0])}</span>`:'';
+      b.innerHTML=`<div class="d">${esc(p.date||'')}</div><h4>${esc(p.title||'')}</h4>${tag}`;
+      b.onclick=()=>openArt(p); list.appendChild(b);
+    });
+    const all=document.createElement('span'); all.className='il-all'; all.textContent='Lihat semua artikel →';
+    all.onclick=()=>{ setCat('Artikel'); const y=document.querySelector('.chips').offsetTop-90; window.scrollTo({top:y,behavior:'smooth'}); };
+    list.appendChild(all);
+  }
+
   function openArt(p){
     const tags=(p.tags||[]).map(t=>`<span class="tg">${esc(CAT_LABEL[t]||t)}</span>`).join(' ');
     const src = p.source ? `<div class="src"><a href="${esc(p.source)}" target="_blank" rel="noopener">Baca sumber asli ↗</a></div>` : '';
@@ -423,7 +469,7 @@
 
   // muat artikel
   fetch('posts.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(posts=>{
-    POSTS = Array.isArray(posts)?posts:[]; renderChips(); renderFeed();
+    POSTS = Array.isArray(posts)?posts:[]; renderChips(); renderFeed(); renderHeroLatest();
   }).catch(()=>{ renderChips(); renderFeed(); });
 </script>
 </body>
