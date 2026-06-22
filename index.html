@@ -58,7 +58,7 @@
 
   /* MARKET STATS */
   .stats{border-bottom:1px solid var(--line2);background:#0C1727}
-  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .stats .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
   .st{padding:18px 22px;border-left:1px solid var(--line2)}
   .st:first-child{border-left:0}
   .st .k{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
@@ -174,7 +174,6 @@
     <div class="st"><div class="k">Kripto Market Cap</div><div class="v num" id="mc">—</div><div class="ch num" id="mcc">memuat…</div></div>
     <div class="st"><div class="k">BTC Dominance</div><div class="v num" id="dom">—</div><div class="ch num">dari total market cap</div></div>
     <div class="st"><div class="k">Volume 24 Jam</div><div class="v num" id="vol">—</div><div class="ch num">seluruh pasar kripto</div></div>
-    <div class="st"><div class="k">Pembaruan</div><div class="v num" id="upd">—</div><div class="ch num">harga &amp; berita otomatis</div></div>
   </div>
 </div>
 
@@ -288,7 +287,6 @@
       const mcc = document.getElementById('mcc'); mcc.textContent = sign(ch)+' (24j)'; mcc.className = 'ch num '+(ch>=0?'up':'down');
       document.getElementById('dom').textContent = (g.market_cap_percentage.btc||0).toFixed(1)+'%';
       document.getElementById('vol').textContent = fmtBig(g.total_volume.usd);
-      document.getElementById('upd').textContent = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
     }catch(e){}
   }
 
