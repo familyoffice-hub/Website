@@ -1,0 +1,10 @@
+[
+  {
+    "id": "contoh-2026-06-22",
+    "date": "22 Jun 2026",
+    "title": "Contoh: Catatan Pasar Harian",
+    "summary": "Artikel ini akan otomatis dibuat oleh sistem AI Anda setiap hari dan tampil di sini.",
+    "tags": ["Makro", "Saham", "Crypto"],
+    "html": "<p>Ini adalah contoh artikel. Setelah Orchestrator tersambung ke repo website, setiap pagi AI akan menulis ringkasan pasar harian berdasarkan berita yang dipantau Tools A, lalu menerbitkannya ke halaman ini secara otomatis.</p><h3>Makro &amp; Pasar</h3><p>Ringkasan kondisi suku bunga, inflasi, nilai tukar, dan indeks utama.</p><h3>Aset Digital</h3><p>Pergerakan crypto dan perkembangan DeFi yang relevan.</p><h3>Yang Perlu Diperhatikan</h3><p>Risiko dan hal-hal yang layak ditimbang hari ini.</p>"
+  }
+]
