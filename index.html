@@ -187,7 +187,7 @@
 <!-- CHIPS + FEED -->
 <section class="wrap">
   <div class="chips" id="chips"></div>
-  <div class="sec-title"><h2>Terbaru</h2><span id="count"></span></div>
+  <div class="sec-title"><h2 id="feedTitle">Terbaru</h2><span id="count"></span></div>
   <div class="feed" id="feed"></div>
   <div class="more-row" id="moreRow" hidden><button class="btn" id="moreBtn">Muat lebih banyak</button></div>
 </section>
@@ -261,18 +261,22 @@
   // tampilkan langsung saat halaman dibuka (tidak menunggu data)
   renderTicker(placeholderTicker());
 
+  let tickerOk=false, globalOk=false;
   async function loadTicker(){
     try{
       const ids = COINS.map(c=>c.id).join(',');
       const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`,{cache:'no-store'});
       if(!r.ok) throw 0;
       const d = await r.json();
+      let got=0;
       const items = COINS.map(c=>{
         const o=d[c.id]; if(!o) return `<span class="tk"><b>${c.s}</b><span class="p">…</span></span>`;
+        got++;
         const ch=o.usd_24h_change||0, cls=ch>=0?'up':'down';
         return `<span class="tk"><b>${c.s}</b><span class="p">${fmtUsd(o.usd)}</span><span class="c ${cls}">${sign(ch)}</span></span>`;
       });
       renderTicker(items);
+      if(got>0) tickerOk=true;
     }catch(e){ /* biarkan tampilan terakhir tetap berjalan */ }
   }
 
@@ -287,11 +291,21 @@
       const mcc = document.getElementById('mcc'); mcc.textContent = sign(ch)+' (24j)'; mcc.className = 'ch num '+(ch>=0?'up':'down');
       document.getElementById('dom').textContent = (g.market_cap_percentage.btc||0).toFixed(1)+'%';
       document.getElementById('vol').textContent = fmtBig(g.total_volume.usd);
+      globalOk=true;
     }catch(e){}
   }
 
-  function refresh(){ loadTicker(); loadGlobal(); }
-  refresh(); setInterval(refresh, 60000); // perbarui tiap 60 detik
+  function refresh(){ if(!tickerOk) loadTicker(); if(!globalOk) loadGlobal(); }
+  // muat segera, lalu coba ulang cepat (2s,4s,6s,...) sampai data tampil, baru santai 60 detik
+  loadTicker(); loadGlobal();
+  let quickTries=0;
+  const quick=setInterval(()=>{
+    quickTries++;
+    if((tickerOk && globalOk) || quickTries>=8){ clearInterval(quick); return; }
+    refresh();
+  }, 2500);
+  // refresh berkala (harga selalu diperbarui walau sudah pernah tampil)
+  setInterval(()=>{ tickerOk=false; globalOk=false; loadTicker(); loadGlobal(); }, 60000);
 
   // ====== FEED ARTIKEL (posts.json dari AI/Orchestrator) ======
   const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -324,9 +338,15 @@
 
   function renderFeed(){
     const feed=document.getElementById('feed'); feed.innerHTML='';
+    const ft=document.getElementById('feedTitle');
+    if(ft) ft.textContent = (activeCat==='Semua') ? 'Terbaru' : (CAT_LABEL[activeCat]||activeCat);
     const list = POSTS.filter(matchCat);
     document.getElementById('count').textContent = list.length ? `${list.length} artikel` : '';
-    if(!list.length){ feed.innerHTML='<div class="empty" style="grid-column:1/-1">Belum ada artikel. Artikel akan muncul otomatis setiap hari setelah sistem berjalan.</div>'; document.getElementById('moreRow').hidden=true; return; }
+    if(!list.length){
+      const ch = (activeCat==='Semua') ? '' : ' di kanal '+(CAT_LABEL[activeCat]||activeCat);
+      feed.innerHTML='<div class="empty" style="grid-column:1/-1">Belum ada artikel'+ch+'. Artikel akan muncul otomatis setelah sistem berjalan, atau bisa ditambahkan manual.</div>';
+      document.getElementById('moreRow').hidden=true; return;
+    }
     const vis=list.slice(0,shown);
     vis.forEach((p,i)=>feed.appendChild(card(p, i===0)));
     document.getElementById('moreRow').hidden = list.length<=shown;
