@@ -1,12 +1,20 @@
 [
   {
-    "id": "2026-06-22",
-    "date": "22 Jun 2026",
-    "title": "Catatan Pasar Harian — 22 Jun 2026",
-    "summary": "1 sorotan hari ini, termasuk: DJP Masih Optimistis Penerimaan Pajak 2026 Tumbuh 23% - DDTCNews.",
-    "tags": [
-      "Pasar"
-    ],
-    "html": "<p>Pasar keuangan pada hari Senin, 22 Juni 2026, menunjukkan dinamika yang dipengaruhi oleh berbagai sentimen ekonomi. Investor mencermati perkembangan kebijakan fiskal dan potensi pertumbuhan ekonomi, yang tercermin dalam pergerakan aset yang beragam.</p>\n\n<h3>Optimisme Penerimaan Pajak 2026</h3>\n<p>Direktorat Jenderal Pajak (DJP) dilaporkan masih mempertahankan optimisme terhadap target penerimaan pajak tahun 2026. Proyeksi pertumbuhan sebesar 23% menjadi sorotan, yang mengindikasikan keyakinan otoritas pajak terhadap pemulihan dan pertumbuhan ekonomi yang berkelanjutan. Angka ini, jika tercapai, dapat memberikan ruang fiskal yang lebih baik bagi pemerintah untuk membiayai berbagai program pembangunan dan stimulus ekonomi.</p>\n\n<h3>Dampak Kebijakan Fiskal terhadap Pasar</h3>\n<p>Optimisme penerimaan pajak ini berpotensi memberikan sentimen positif bagi pasar. Pertumbuhan penerimaan pajak yang kuat dapat diartikan sebagai indikasi aktivitas ekonomi yang meningkat, yang pada gilirannya dapat mendukung kinerja perusahaan. Investor akan terus memantau bagaimana kebijakan fiskal yang didukung oleh penerimaan pajak ini akan diterjemahkan dalam kebijakan belanja pemerintah dan dampaknya terhadap sektor-sektor ekonomi tertentu. Kinerja pasar saham dan obligasi dapat dipengaruhi oleh persepsi investor mengenai kesehatan fiskal negara dan potensi stimulus ekonomi di masa mendatang.</p>\n\n<h3>Perkembangan Sektor Lainnya</h3>\n<p>Selain isu penerimaan pajak, pasar juga akan mencermati perkembangan di sektor-sektor lain yang mungkin dipengaruhi oleh faktor makroekonomi global dan domestik. Perubahan suku bunga, inflasi, dan kebijakan moneter dari bank sentral utama dunia akan terus menjadi perhatian. Data ekonomi yang dirilis dari berbagai negara juga akan memberikan gambaran mengenai tren pertumbuhan global dan potensi dampaknya terhadap pasar komoditas dan mata uang.</p>\n\n<h3>Yang Perlu Diperhatikan</h3>\n<p>Investor disarankan untuk terus memantau rilis data ekonomi terbaru, baik dari dalam maupun luar negeri. Selain itu, perkembangan kebijakan pemerintah terkait perpajakan dan belanja negara akan menjadi faktor kunci yang perlu dicermati. Pergerakan pasar saham, obligasi, dan aset lainnya akan mencerminkan bagaimana investor menginterpretasikan informasi-informasi tersebut dan menyesuaikan strategi investasi mereka.</p>"
+    "id": "demo-3", "date": "22 Jun 2026", "title": "Tokenisasi Saham Mulai Dilirik Investor Ritel Indonesia",
+    "summary": "Minat terhadap aset tokenized (RWA) meningkat seiring kejelasan regulasi. Apa artinya bagi investor?",
+    "tags": ["Regulation","Saham","Crypto"], "source": "https://contoh.id/sumber",
+    "html": "<p>Tokenisasi saham dan real-world asset (RWA) makin menjadi perhatian. Artikel ini contoh; setelah sistem berjalan, AI menulis dan menerbitkan artikel asli tiap hari.</p><h3>Mengapa Penting</h3><p>Akses lebih luas, likuiditas, dan transparansi on-chain.</p><h3>Yang Perlu Diperhatikan</h3><p>Risiko regulasi, custody, dan likuiditas tetap perlu ditimbang.</p>"
+  },
+  {
+    "id": "demo-2", "date": "22 Jun 2026", "title": "The Fed Tahan Suku Bunga: Dampak ke Saham & Crypto",
+    "summary": "Sinyal suku bunga lebih lama menekan obligasi dan menggerakkan aset berisiko.",
+    "tags": ["Makro","Crypto"], "source": "",
+    "html": "<p>Contoh artikel makro. The Fed mengindikasikan suku bunga bertahan lebih lama.</p><h3>Saham</h3><p>Sektor sensitif suku bunga tertekan.</p><h3>Crypto</h3><p>Volatilitas meningkat mengikuti sentimen global.</p>"
+  },
+  {
+    "id": "demo-1", "date": "21 Jun 2026", "title": "DeFi: Imbal Hasil Staking Bergerak di Protokol Utama",
+    "summary": "Perubahan yield dan likuiditas di beberapa protokol DeFi pekan ini.",
+    "tags": ["DeFi","Crypto"], "source": "",
+    "html": "<p>Contoh artikel DeFi tentang pergerakan yield staking.</p><h3>Risiko</h3><p>Smart contract dan likuiditas tetap jadi perhatian utama.</p>"
   }
 ]
