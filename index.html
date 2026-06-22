@@ -217,7 +217,7 @@
         <p style="font-size:.9rem">Media intelijen pasar untuk Indonesia — saham, crypto, DeFi, dan keuangan. Berita diringkas AI tiap hari.</p>
       </div>
       <div><h4>Kanal</h4>
-        <a data-cat="Saham">Saham</a><a data-cat="Crypto">Crypto</a><a data-cat="DeFi">DeFi</a><a data-cat="Makro">Makro</a><a data-cat="Regulation">Regulasi</a>
+        <a data-cat="Saham">Saham</a><a data-cat="Crypto">Crypto</a><a data-cat="DeFi">DeFi</a><a data-cat="Artikel">Artikel</a><a data-cat="Makro">Makro</a><a data-cat="Regulation">Regulasi</a>
       </div>
       <div><h4>Ikuti</h4>
         <a href="#" id="tgLink3">Telegram</a><a href="#">X / Twitter</a><a href="#">LinkedIn</a><a href="#">Instagram</a>
@@ -297,22 +297,23 @@
 
   // ====== FEED ARTIKEL (posts.json dari AI/Orchestrator) ======
   const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  // Daftar menu TETAP: Artikel berada tepat setelah DeFi
+  const CATS = ['Semua','Saham','Crypto','DeFi','Artikel','Makro','Regulation'];
   let POSTS = [], activeCat = 'Semua', shown = 7;
-  const CAT_LABEL = {Saham:'Saham',Crypto:'Crypto',DeFi:'DeFi',Makro:'Makro',Regulation:'Regulasi',Macro:'Makro',Tax:'Pajak',Risk:'Risiko'};
+  const CAT_LABEL = {Semua:'Semua',Saham:'Saham',Crypto:'Crypto',DeFi:'DeFi',Artikel:'Artikel',Makro:'Makro',Macro:'Makro',Regulation:'Regulasi',Tax:'Pajak',Risk:'Risiko'};
 
-  function catsOf(p){ return (p.tags||[]).map(t=>t); }
-  function matchCat(p){ if(activeCat==='Semua') return true; return catsOf(p).some(t=>t.toLowerCase()===activeCat.toLowerCase() || (CAT_LABEL[t]||'').toLowerCase()===activeCat.toLowerCase()); }
+  function catsOf(p){ return (p.tags||[]); }
+  function matchCat(p){ if(activeCat==='Semua') return true;
+    const want=(CAT_LABEL[activeCat]||activeCat).toLowerCase();
+    return catsOf(p).some(t=> t.toLowerCase()===activeCat.toLowerCase() || (CAT_LABEL[t]||'').toLowerCase()===want); }
 
+  function setCat(c){ activeCat=c; shown=7; renderChips(); renderFeed(); }
   function renderChips(){
-    const set = new Set(['Semua']); POSTS.forEach(p=>catsOf(p).forEach(t=>set.add(t)));
-    const chips = document.getElementById('chips'); chips.innerHTML='';
-    [...set].slice(0,10).forEach(c=>{
-      const b=document.createElement('button'); b.className='chip'+(c===activeCat?' active':''); b.textContent=CAT_LABEL[c]||c;
-      b.onclick=()=>{activeCat=c; shown=7; renderChips(); renderFeed();}; chips.appendChild(b);
-    });
-    // nav kategori atas
+    const chips=document.getElementById('chips'); chips.innerHTML='';
+    CATS.forEach(c=>{ const b=document.createElement('button'); b.className='chip'+(c===activeCat?' active':''); b.textContent=CAT_LABEL[c]||c; b.onclick=()=>setCat(c); chips.appendChild(b); });
     const nav=document.getElementById('cats'); nav.innerHTML='';
-    [...set].slice(0,7).forEach(c=>{const a=document.createElement('a');a.textContent=CAT_LABEL[c]||c;a.onclick=()=>{activeCat=c;shown=7;renderChips();renderFeed();window.scrollTo({top:document.querySelector('.chips').offsetTop-80,behavior:'smooth'});};nav.appendChild(a);});
+    CATS.forEach(c=>{ const a=document.createElement('a'); a.textContent=CAT_LABEL[c]||c; if(c===activeCat)a.style.color='var(--gold-soft)';
+      a.onclick=()=>{ setCat(c); const y=document.querySelector('.chips').offsetTop-90; window.scrollTo({top:y,behavior:'smooth'}); }; nav.appendChild(a); });
   }
 
   function card(p, feat){
