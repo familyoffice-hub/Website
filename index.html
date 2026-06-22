@@ -250,9 +250,6 @@
     {y:"^TWII",s:"TAIWAN"},{y:"^NSEI",s:"NIFTY 50"},{y:"^BSESN",s:"SENSEX"},{y:"^STI",s:"STI"},
     {y:"^KLSE",s:"KLCI"},{y:"^SET.BK",s:"SET"},{y:"PSEI.PS",s:"PSEi"}
   ];
-  // Jembatan CORS untuk data Yahoo Finance (gratis). Bila satu bermasalah, ganti dengan yang lain di bawah.
-  const YPROXY = "https://corsproxy.io/?url=";
-  // alternatif: "https://corsproxy.io/?url="
   // Mata uang (USD base dari open.er-api.com)
   const FX = [
     {pair:"USD/IDR",base:"USD",quote:"IDR"},{pair:"EUR/USD",base:"EUR",quote:"USD"},
@@ -307,49 +304,19 @@
     }catch(e){}
   }
 
-  // --- Currency (open.er-api.com, gratis) ---
-  async function loadFx(){
+  // --- Index bursa + Currency (dari market.json, ditulis server tiap 30 menit; bebas CORS) ---
+  async function loadMarket(){
     try{
-      const r = await fetch('https://open.er-api.com/v6/latest/USD',{cache:'no-store'});
+      const r = await fetch('market.json?t='+Date.now(),{cache:'no-store'});
       if(!r.ok) throw 0;
-      const rates = (await r.json()).rates || {};
-      TK.fx = FX.map(f=>{
-        let v;
-        if(f.base==='USD') v = rates[f.quote];
-        else if(f.quote==='USD') v = rates[f.base] ? 1/rates[f.base] : null;
-        else v = (rates[f.quote]&&rates[f.base]) ? rates[f.quote]/rates[f.base] : null;
-        return v ? tkItem(f.pair, fmtFx(v)) : tkItem(f.pair,'…');
-      });
-      fxOk=true; renderTicker();
+      const m = await r.json();
+      if(Array.isArray(m.indices) && m.indices.length)
+        TK.index = m.indices.map(x=> tkItem(x.s, (typeof x.price==='number')?fmtIdx(x.price):'…', (typeof x.chg==='number')?x.chg:undefined));
+      if(Array.isArray(m.fx) && m.fx.length)
+        TK.fx = m.fx.map(x=> tkItem(x.pair, (typeof x.price==='number')?fmtFx(x.price):'…'));
+      renderTicker();
+      if(m.indices && m.indices.some(x=>typeof x.price==='number')) indexOk=true;
     }catch(e){}
-  }
-
-  // --- Index bursa (Yahoo Finance via proxy CORS) ---
-  async function fetchIndex(ix){
-    try{
-      const yurl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ix.y)}?interval=1d&range=2d`;
-      const r = await fetch(YPROXY + encodeURIComponent(yurl), {cache:'no-store'});
-      if(!r.ok) throw 0;
-      const m = (await r.json()).chart.result[0].meta;
-      const price = m.regularMarketPrice;
-      const prev = m.chartPreviousClose || m.previousClose;
-      const chg = (prev && price) ? ((price-prev)/prev*100) : undefined;
-      return tkItem(ix.s, fmtIdx(price), chg);
-    }catch(e){ return tkItem(ix.s,'…'); }
-  }
-  async function loadIndices(){
-    // ambil dengan konkurensi terbatas (4) agar tidak membebani proxy
-    const out = new Array(INDICES.length);
-    let i = 0;
-    async function worker(){
-      while(i < INDICES.length){
-        const idx = i++; out[idx] = await fetchIndex(INDICES[idx]);
-        TK.index = out.map((x,k)=> x || tkItem(INDICES[k].s,'…'));
-        renderTicker();
-      }
-    }
-    await Promise.all([worker(),worker(),worker(),worker()]);
-    indexOk = out.some(x => x && !x.includes('…'));
   }
 
   // --- Statistik global (kartu di bawah header) ---
@@ -368,17 +335,17 @@
   }
 
   // muat segera
-  loadCrypto(); loadGlobal(); loadFx(); loadIndices();
-  // coba ulang cepat untuk crypto/stat/fx sampai tampil
+  loadCrypto(); loadGlobal(); loadMarket();
+  // coba ulang cepat untuk crypto/stat sampai tampil
   let quickTries=0;
   const quick=setInterval(()=>{
     quickTries++;
-    if((cryptoOk && globalOk && fxOk) || quickTries>=8){ clearInterval(quick); return; }
-    if(!cryptoOk) loadCrypto(); if(!globalOk) loadGlobal(); if(!fxOk) loadFx();
+    if((cryptoOk && globalOk) || quickTries>=8){ clearInterval(quick); return; }
+    if(!cryptoOk) loadCrypto(); if(!globalOk) loadGlobal();
   }, 2500);
-  // refresh berkala: crypto & stat tiap 60 detik; index & currency tiap 5 menit
+  // refresh berkala: crypto & statistik tiap 60 detik; index & currency (market.json) tiap 60 detik
   setInterval(()=>{ cryptoOk=false; globalOk=false; loadCrypto(); loadGlobal(); }, 60000);
-  setInterval(()=>{ loadFx(); loadIndices(); }, 300000);
+  setInterval(loadMarket, 60000);
 
   // ====== FEED ARTIKEL (posts.json dari AI/Orchestrator) ======
   const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
