@@ -1,0 +1,32 @@
+name: Update Market Data
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # tiap 30 menit
+  workflow_dispatch:           # bisa dijalankan manual
+
+permissions:
+  contents: write
+
+jobs:
+  market:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode
+        uses: actions/checkout@v4
+
+      - name: Siapkan Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Ambil data pasar (index + currency)
+        run: python market_fetch.py
+
+      - name: Commit market.json bila ada perubahan
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add market.json
+          git commit -m "update market.json" || echo "Tidak ada perubahan"
+          git push
