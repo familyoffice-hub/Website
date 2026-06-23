@@ -491,7 +491,7 @@
     const out=[];
     for(let j=i+1;j<lines.length;j++){
       if(/^\s*\d+\.\s/.test(lines[j])) break;          // mulai bagian bernomor berikutnya
-      const m=lines[j].match(/^\s*\*\s+(.*\S)\s*$/);    // baris bullet "*  ..."
+      const m=lines[j].match(/^\s*[*\u2022-]\s+(.*\S)\s*$/);    // baris bullet "*", "•", atau "-"
       if(m){ const t=m[1].trim(); if(t.indexOf('\uD83D\uDD12')>=0) continue; out.push(mdItalic(t)); } // lewati item 🔒
     }
     return out;
