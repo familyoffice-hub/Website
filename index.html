@@ -60,6 +60,11 @@
   .mobile-menu a{padding:14px 22px;color:var(--ivory-dim);font-size:.95rem;border-top:1px solid var(--line2);cursor:pointer}
   .mobile-menu a:first-child{border-top:0}
   .mobile-menu a.active{color:var(--gold-soft)}
+  .mobile-menu{position:absolute;top:66px;left:0;right:0;background:#0C1727;border-bottom:1px solid var(--line2);box-shadow:0 14px 30px rgba(0,0,0,.45);display:none;flex-direction:column;z-index:39}
+  .mobile-menu.open{display:flex}
+  .mobile-menu a{padding:14px 22px;color:var(--ivory-dim);font-size:.95rem;border-top:1px solid var(--line2);cursor:pointer}
+  .mobile-menu a:first-child{border-top:0}
+  .mobile-menu a.active{color:var(--gold-soft)}
 
   /* MARKET STATS */
   .stats{border-bottom:1px solid var(--line2);background:#0C1727}
@@ -198,6 +203,7 @@
     </div>
     <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   </div>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Menu navigasi"></nav>
 </header>
 
 <!-- MARKET STATS -->
@@ -454,7 +460,18 @@
 
   // footer kanal & menu
   document.querySelectorAll('.foot-grid a[data-cat]').forEach(a=>a.onclick=(e)=>{e.preventDefault();activeCat=a.dataset.cat;shown=7;renderChips();renderFeed();window.scrollTo({top:document.querySelector('.chips').offsetTop-80,behavior:'smooth'});});
-  document.getElementById('menuBtn').onclick=()=>{window.scrollTo({top:document.querySelector('.chips').offsetTop-80,behavior:'smooth'});};
+  // ===== Menu mobile (hamburger) =====
+  (function(){
+    const btn=document.getElementById('menuBtn'), panel=document.getElementById('mobileMenu');
+    function build(){ panel.innerHTML='';
+      CATS.forEach(c=>{ const a=document.createElement('a'); a.textContent=CAT_LABEL[c]||c;
+        if(c===activeCat) a.className='active';
+        a.onclick=()=>{ setCat(c); panel.classList.remove('open');
+          const y=document.querySelector('.chips').offsetTop-80; window.scrollTo({top:y,behavior:'smooth'}); };
+        panel.appendChild(a); }); }
+    btn.onclick=(e)=>{ e.stopPropagation(); build(); panel.classList.toggle('open'); };
+    document.addEventListener('click',(e)=>{ if(!panel.contains(e.target) && e.target!==btn && !btn.contains(e.target)) panel.classList.remove('open'); });
+  })();
 
   // langganan (tanpa backend -> mailto)
   document.getElementById('subBtn').onclick=()=>{
