@@ -55,6 +55,11 @@
   .btn-solid{background:var(--gold);color:var(--ink)}
   .btn-solid:hover{background:var(--gold-soft)}
   .menu-btn{display:none;background:none;border:0;color:var(--ivory);cursor:pointer;padding:6px}
+  .mobile-menu{position:absolute;top:66px;left:0;right:0;background:#0C1727;border-bottom:1px solid var(--line2);box-shadow:0 14px 30px rgba(0,0,0,.45);display:none;flex-direction:column;z-index:39}
+  .mobile-menu.open{display:flex}
+  .mobile-menu a{padding:14px 22px;color:var(--ivory-dim);font-size:.95rem;border-top:1px solid var(--line2);cursor:pointer}
+  .mobile-menu a:first-child{border-top:0}
+  .mobile-menu a.active{color:var(--gold-soft)}
 
   /* MARKET STATS */
   .stats{border-bottom:1px solid var(--line2);background:#0C1727}
