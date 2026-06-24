@@ -486,13 +486,20 @@
   function mdItalic(t){ return esc(t).replace(/\*([^*]+)\*/g,'<em>$1</em>'); }
   function parseExec(md){
     const lines=md.split(/\r?\n/);
-    let i=lines.findIndex(l=>/executive summary/i.test(l));
+    // Cari judul bagian ringkasan: versi AI ("Executive Summary") ATAU versi fallback ("Sorotan utama").
+    let i=lines.findIndex(l=>/executive summary|sorotan utama/i.test(l));
     if(i<0) return [];
     const out=[];
     for(let j=i+1;j<lines.length;j++){
-      if(/^\s*\d+\.\s/.test(lines[j])) break;          // mulai bagian bernomor berikutnya
+      if(/^\s*\d+\.\s/.test(lines[j])) break;          // mulai bagian bernomor berikutnya (versi AI)
+      if(/disclaimer/i.test(lines[j])) break;          // akhir brief fallback
       const m=lines[j].match(/^\s*[*\u2022-]\s+(.*\S)\s*$/);    // baris bullet "*", "•", atau "-"
-      if(m){ const t=m[1].trim(); if(t.indexOf('\uD83D\uDD12')>=0) continue; out.push(mdItalic(t)); } // lewati item 🔒
+      if(m){
+        let t=m[1].trim();
+        if(t.indexOf('\uD83D\uDD12')>=0) continue;     // lewati item 🔒
+        t=t.replace(/\s*\[[^\]]*\]/g,'').trim();         // buang tag agen mis. "[Tools A Monitor]"
+        if(t) out.push(mdItalic(t));
+      }
     }
     return out;
   }
