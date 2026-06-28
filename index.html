@@ -164,6 +164,10 @@
   .art h1{font-size:clamp(1.7rem,1.2rem + 1.6vw,2.5rem);margin-bottom:10px}
   .art .meta{color:var(--muted);font-size:.82rem;margin-bottom:8px}
   .art .back{font-size:.84rem;color:var(--gold);cursor:pointer;display:inline-block;margin-bottom:18px}
+  .art .atop{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+  .art .atop .back{margin-bottom:0}
+  .sharebtn{background:transparent;border:1px solid var(--line2);color:var(--gold);font-size:.8rem;padding:6px 12px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:border-color .2s}
+  .sharebtn:hover{border-color:var(--gold)}
   .art h3{font-family:"Fraunces",serif;font-size:1.3rem;margin:24px 0 8px;color:var(--ivory)}
   .art p{color:var(--ivory-dim);margin:0 0 14px}
   .art ul,.art ol{color:var(--ivory-dim);padding-left:22px;margin:0 0 14px}
@@ -442,18 +446,43 @@
     document.getElementById('moreRow').hidden = list.length<=shown;
   }
 
-  function openArt(p){
+  function artUrl(p){ return location.origin+location.pathname+'#a/'+encodeURIComponent(p.id||''); }
+  function postById(id){ return POSTS.find(p=>String(p.id)===String(id)); }
+
+  function openArt(p, fromRoute){
     const tags=dispTags(p).map(t=>`<span class="tg">${esc(CAT_LABEL[t]||t)}</span>`).join(' ');
     const src = p.source ? `<div class="src"><a href="${esc(p.source)}" target="_blank" rel="noopener">Baca sumber asli ↗</a></div>` : '';
     document.getElementById('mBody').innerHTML =
-      `<div class="art"><span class="back" id="mBack">← Kembali ke daftar</span>`+
+      `<div class="art"><div class="atop"><span class="back" id="mBack">← Kembali ke daftar</span>`+
+      `<button class="sharebtn" id="mShare" type="button">🔗 Salin link</button></div>`+
       `<h1>${esc(p.title||'')}</h1><div class="meta">${esc(p.date||'')} ${tags?'· '+tags:''}</div>`+
       (p.html?mdArticle(p.html):('<p>'+esc(p.summary||'')+'</p>'))+ src +
       `<div class="disc">Artikel ini ringkasan editorial berbahasa Indonesia yang disusun ulang oleh AI dari pemantauan berita, dan bukan nasihat keuangan/investasi/pajak/hukum. Aset kripto berisiko tinggi. Lakukan riset mandiri.</div></div>`;
     document.getElementById('mBack').onclick=closeArt;
+    document.getElementById('mShare').onclick=()=>{
+      const url=artUrl(p), btn=document.getElementById('mShare'), old=btn.textContent;
+      const done=()=>{ btn.textContent='✓ Link tersalin'; setTimeout(()=>{ btn.textContent=old; },1800); };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(url).then(done).catch(()=>window.prompt('Salin link artikel ini:',url));
+      } else window.prompt('Salin link artikel ini:',url);
+    };
+    if(!fromRoute && location.hash!=='#a/'+encodeURIComponent(p.id||'')){
+      history.pushState(null,'','#a/'+encodeURIComponent(p.id||''));
+    }
     document.getElementById('modal').hidden=false; document.body.style.overflow='hidden';
   }
-  function closeArt(){document.getElementById('modal').hidden=true; document.body.style.overflow='';}
+  function closeArt(){
+    document.getElementById('modal').hidden=true; document.body.style.overflow='';
+    if(location.hash.indexOf('#a/')===0){ history.pushState(null,'',location.pathname+location.search); }
+  }
+  // Buka artikel otomatis dari URL (untuk link yang dibagikan)
+  function routeFromHash(){
+    const m=location.hash.match(/^#a\/(.+)$/);
+    if(m){ const p=postById(decodeURIComponent(m[1])); if(p){ openArt(p,true); return; } }
+    if(!document.getElementById('modal').hidden){ document.getElementById('modal').hidden=true; document.body.style.overflow=''; }
+  }
+  window.addEventListener('hashchange', routeFromHash);
+  window.addEventListener('popstate', routeFromHash);
   document.getElementById('mClose').onclick=closeArt;
   document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeArt();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('modal').hidden)closeArt();});
@@ -580,7 +609,7 @@
 
   // muat artikel
   fetch('posts.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(posts=>{
-    POSTS = Array.isArray(posts)?posts:[]; renderChips(); renderFeed(); loadHeroBrief();
+    POSTS = Array.isArray(posts)?posts:[]; renderChips(); renderFeed(); loadHeroBrief(); routeFromHash();
   }).catch(()=>{ renderChips(); renderFeed(); });
 </script>
 </body>
