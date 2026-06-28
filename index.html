@@ -166,7 +166,8 @@
   .art .back{font-size:.84rem;color:var(--gold);cursor:pointer;display:inline-block;margin-bottom:18px}
   .art h3{font-family:"Fraunces",serif;font-size:1.3rem;margin:24px 0 8px;color:var(--ivory)}
   .art p{color:var(--ivory-dim);margin:0 0 14px}
-  .art ul{color:var(--ivory-dim);padding-left:20px;margin:0 0 14px}
+  .art ul,.art ol{color:var(--ivory-dim);padding-left:22px;margin:0 0 14px}
+  .art li{margin:0 0 6px}
   .art .src{margin-top:22px}
   .art .src a{color:var(--teal);font-size:.9rem}
   .art .disc{margin-top:22px;padding-top:16px;border-top:1px solid var(--line2);font-size:.78rem;color:#70808f;line-height:1.7}
@@ -447,7 +448,7 @@
     document.getElementById('mBody').innerHTML =
       `<div class="art"><span class="back" id="mBack">← Kembali ke daftar</span>`+
       `<h1>${esc(p.title||'')}</h1><div class="meta">${esc(p.date||'')} ${tags?'· '+tags:''}</div>`+
-      (p.html||('<p>'+esc(p.summary||'')+'</p>'))+ src +
+      (p.html?mdArticle(p.html):('<p>'+esc(p.summary||'')+'</p>'))+ src +
       `<div class="disc">Artikel ini ringkasan editorial berbahasa Indonesia yang disusun ulang oleh AI dari pemantauan berita, dan bukan nasihat keuangan/investasi/pajak/hukum. Aset kripto berisiko tinggi. Lakukan riset mandiri.</div></div>`;
     document.getElementById('mBack').onclick=closeArt;
     document.getElementById('modal').hidden=false; document.body.style.overflow='hidden';
@@ -484,6 +485,44 @@
   // ====== BRIEF INTELIJEN HARI INI (baca arsip Orchestrator, lintas-repo) ======
   const ORCH_RAW='https://raw.githubusercontent.com/familyoffice-hub/family-office-orchestrator/main/';
   function mdItalic(t){ return esc(t).replace(/\*([^*]+)\*/g,'<em>$1</em>'); }
+  // Penekanan baris (tebal/miring) — dipakai setelah penanda daftar dibuang.
+  function inlineMd(s){
+    return s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')   // **tebal**
+            .replace(/(^|[^*])\*([^*\n]+)\*/g,'$1<em>$2</em>');   // *miring*
+  }
+  // Ubah teks artikel (markdown ringan / teks polos) menjadi HTML rapi:
+  // paragraf, sub-judul "##", daftar "-/•/*", dan daftar bernomor "1." — termasuk
+  // saat baris pengantar dan daftar berada dalam satu blok.
+  function mdArticle(raw){
+    if(!raw) return '';
+    var t=String(raw);
+    if(/<(p|h2|h3|ul|ol|li|br)\b/i.test(t)) return inlineMd(t); // sudah HTML
+    t=t.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});
+    var out=[], para=[], list=null, listTag='';
+    function flushPara(){ if(para.length){ out.push('<p>'+inlineMd(para.join(' '))+'</p>'); para=[]; } }
+    function flushList(){ if(list){ out.push('<'+listTag+'>'+list.join('')+'</'+listTag+'>'); list=null; listTag=''; } }
+    function flushAll(){ flushPara(); flushList(); }
+    t.split(/\n/).forEach(function(r){
+      var l=r.replace(/\s+$/,'');
+      if(l.trim()===''){ flushAll(); return; }
+      var h=l.match(/^\s*#{1,6}\s+(.*)$/);
+      if(h){ flushAll(); out.push('<h3>'+inlineMd(h[1].trim())+'</h3>'); return; }
+      if(/^\s*[-•*]\s+\S/.test(l)){
+        flushPara();
+        if(listTag!=='ul'){ flushList(); listTag='ul'; list=[]; }
+        list.push('<li>'+inlineMd(l.replace(/^\s*[-•*]\s+/,'').trim())+'</li>'); return;
+      }
+      if(/^\s*\d+[.)]\s+\S/.test(l)){
+        flushPara();
+        if(listTag!=='ol'){ flushList(); listTag='ol'; list=[]; }
+        list.push('<li>'+inlineMd(l.replace(/^\s*\d+[.)]\s+/,'').trim())+'</li>'); return;
+      }
+      flushList(); para.push(l);
+    });
+    flushAll();
+    return out.join('\n');
+  }
+
   function parseExec(md){
     const lines=md.split(/\r?\n/);
     // Cari judul bagian ringkasan: versi AI ("Executive Summary") ATAU versi fallback ("Sorotan utama").
