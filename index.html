@@ -204,7 +204,6 @@
     <nav class="cats" id="cats"></nav>
     <div class="hcta">
       <a class="btn" href="#langganan">Berlangganan</a>
-      <a class="btn-solid btn" href="#" id="tgLink">Telegram ↗</a>
     </div>
     <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   </div>
@@ -252,7 +251,6 @@
     <div class="row">
       <input type="email" id="subEmail" placeholder="email@anda.com" aria-label="Email" />
       <button class="btn-solid btn" id="subBtn">Berlangganan</button>
-      <a class="btn" href="#" id="tgLink2">Channel Telegram ↗</a>
     </div>
     <p id="subNote" style="min-height:1.2em;font-size:.85rem;margin-top:14px"></p>
   </div>
@@ -508,7 +506,7 @@
     const em=document.getElementById('subEmail').value.trim(), note=document.getElementById('subNote');
     if(!em){note.textContent='Mohon isi email Anda.';note.style.color='var(--down)';return;}
     note.textContent='Terima kasih! Membuka aplikasi email untuk konfirmasi…';note.style.color='var(--up)';
-    window.location.href=`mailto:davidcornelism@gmail.com?subject=${encodeURIComponent('Berlangganan')}&body=${encodeURIComponent('Saya ingin berlangganan update harian. Email: '+em)}`;
+    window.location.href=`mailto:familyofficeindonesia@gmail.com?subject=${encodeURIComponent('Berlangganan')}&body=${encodeURIComponent('Saya ingin berlangganan update harian. Email: '+em)}`;
   };
 
   // ====== BRIEF INTELIJEN HARI INI (baca arsip Orchestrator, lintas-repo) ======
