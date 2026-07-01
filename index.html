@@ -501,12 +501,25 @@
     document.addEventListener('click',(e)=>{ if(!panel.contains(e.target) && e.target!==btn && !btn.contains(e.target)) panel.classList.remove('open'); });
   })();
 
-  // langganan (tanpa backend -> mailto)
+  // Form langganan -> buka Gmail compose (disamakan dengan asetkeuangandigital.id)
+  const SUB_EMAIL = "familyofficeindonesia@gmail.com";
+  function openSubMail(em){
+    const su=encodeURIComponent("Berlangganan Family Office");
+    const body=encodeURIComponent("Halo, saya ingin berlangganan update harian. Email saya: "+em);
+    const gmail="https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(SUB_EMAIL)+"&su="+su+"&body="+body;
+    window.open(gmail, "_blank", "noopener");
+  }
   document.getElementById('subBtn').onclick=()=>{
-    const em=document.getElementById('subEmail').value.trim(), note=document.getElementById('subNote');
-    if(!em){note.textContent='Mohon isi email Anda.';note.style.color='var(--down)';return;}
-    note.textContent='Terima kasih! Membuka aplikasi email untuk konfirmasi…';note.style.color='var(--up)';
-    window.location.href=`mailto:familyofficeindonesia@gmail.com?subject=${encodeURIComponent('Berlangganan')}&body=${encodeURIComponent('Saya ingin berlangganan update harian. Email: '+em)}`;
+    const input=document.getElementById('subEmail');
+    const btn=document.getElementById('subBtn');
+    const note=document.getElementById('subNote');
+    const email=(input.value||"").trim();
+    if(!email || !email.includes("@")){ input.focus(); if(note){ note.textContent='Mohon isi email yang valid.'; note.style.color='var(--down)'; } return; }
+    openSubMail(email);                 // buka email langsung ke familyofficeindonesia@gmail.com
+    input.value=""; if(note){ note.textContent=''; }
+    const done=(txt,color)=>{ btn.textContent=txt; btn.style.background="var("+color+")";
+      setTimeout(()=>{ btn.textContent="Berlangganan"; btn.style.background="var(--gold)"; }, 2600); };
+    done("Terkirim ✓","--up");
   };
 
   // ====== BRIEF INTELIJEN HARI INI (baca arsip Orchestrator, lintas-repo) ======
