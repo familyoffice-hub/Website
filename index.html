@@ -412,11 +412,20 @@
     return catsOf(p).some(t=> t.toLowerCase()===activeCat.toLowerCase() || (CAT_LABEL[t]||'').toLowerCase()===want); }
 
   function setCat(c){ activeCat=c; shown=7; renderChips(); renderFeed(); }
+  // hitung jumlah artikel per kategori (utk menyembunyikan kategori kosong)
+  function countCat(c){
+    if(c==='Semua') return POSTS.length;
+    if(c==='Artikel') return POSTS.filter(p=>String(p.id||'').indexOf('sheet-')===0).length;
+    const want=(CAT_LABEL[c]||c).toLowerCase();
+    return POSTS.filter(p=> (p.tags||[]).some(t=> t.toLowerCase()===c.toLowerCase() || (CAT_LABEL[t]||'').toLowerCase()===want)).length;
+  }
   function renderChips(){
+    const cats = CATS.filter(c=> c==='Semua' || countCat(c)>0);   // sembunyikan kategori kosong
+    if(cats.indexOf(activeCat)<0) activeCat='Semua';               // kalau tab aktif jadi kosong, balik ke Semua
     const chips=document.getElementById('chips'); chips.innerHTML='';
-    CATS.forEach(c=>{ const b=document.createElement('button'); b.className='chip'+(c===activeCat?' active':''); b.textContent=CAT_LABEL[c]||c; b.onclick=()=>setCat(c); chips.appendChild(b); });
+    cats.forEach(c=>{ const b=document.createElement('button'); b.className='chip'+(c===activeCat?' active':''); b.textContent=CAT_LABEL[c]||c; b.onclick=()=>setCat(c); chips.appendChild(b); });
     const nav=document.getElementById('cats'); nav.innerHTML='';
-    CATS.forEach(c=>{ const a=document.createElement('a'); a.textContent=CAT_LABEL[c]||c; if(c===activeCat)a.style.color='var(--gold-soft)';
+    cats.forEach(c=>{ const a=document.createElement('a'); a.textContent=CAT_LABEL[c]||c; if(c===activeCat)a.style.color='var(--gold-soft)';
       a.onclick=()=>{ setCat(c); const y=document.querySelector('.chips').offsetTop-90; window.scrollTo({top:y,behavior:'smooth'}); }; nav.appendChild(a); });
   }
 
