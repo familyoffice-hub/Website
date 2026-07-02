@@ -432,7 +432,8 @@
     const feed=document.getElementById('feed'); feed.innerHTML='';
     const ft=document.getElementById('feedTitle');
     if(ft) ft.textContent = (activeCat==='Semua') ? 'Terbaru' : (CAT_LABEL[activeCat]||activeCat);
-    const list = POSTS.filter(matchCat);
+    let list = POSTS.filter(matchCat);
+    if(activeCat==='Artikel') list = list.slice().sort((a,b)=> _postTs(b) - _postTs(a));
     document.getElementById('count').textContent = list.length ? `${list.length} artikel` : '';
     if(!list.length){
       const ch = (activeCat==='Semua') ? '' : ' di kanal '+(CAT_LABEL[activeCat]||activeCat);
@@ -623,10 +624,19 @@
   const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpdW9pdGpmb2t3eWJhZWdldWV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MzkwNjUsImV4cCI6MjA5ODUxNTA2NX0.AUAWujXuuKZa-iEwmDJmb4RDbkCH6a6I2RYicwWb_-0';     // Supabase > Settings > API > "anon public" (BUKAN service_role)
   const SB_SITE = 'B';                          // penerbit menulis site="B"; biarkan cocok
 
+  // parser tanggal "DD Mon YYYY" (Indonesia) -> timestamp, untuk mengurutkan artikel
+  const _ID_MON = {jan:0,feb:1,mar:2,apr:3,mei:4,jun:5,jul:6,agu:7,ags:7,sep:8,okt:9,nov:10,des:11,agt:7};
+  function _postTs(p){
+    if(p && p._ts!=null) return p._ts;
+    const s = String((p&&p.date)||'');
+    const m = s.match(/(\d{1,2})\s+([A-Za-z]{3})[A-Za-z]*\s+(\d{4})/);
+    if(m){ const mo=_ID_MON[m[2].toLowerCase()]; if(mo!=null){ const t=new Date(+m[3],mo,+m[1]).getTime(); if(p) p._ts=t; return t; } }
+    const d = Date.parse(s); const t = isNaN(d)?0:d; if(p) p._ts=t; return t;
+  }
   function mapSb(row){
     const ts = row.created_at || row.published_at || row.inserted_at || '';
-    let dateStr = '';
-    if(ts){ const d = new Date(ts); if(!isNaN(d)) dateStr = d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); }
+    let dateStr = '', t = 0;
+    if(ts){ const d = new Date(ts); if(!isNaN(d)){ dateStr = d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); t = d.getTime(); } }
     return {
       id:      'sheet-' + (row.id!=null ? row.id : Math.random().toString(36).slice(2)),
       title:   row.title || '',
@@ -634,7 +644,8 @@
       date:    dateStr,
       tags:    ['Artikel'],
       html:    row.body  || '',
-      source:  ''   // 'source' di Supabase = nama penulis, bukan URL -> jangan dijadikan link
+      source:  '',  // 'source' di Supabase = nama penulis, bukan URL -> jangan dijadikan link
+      _ts:     t
     };
   }
   function loadSupabaseArticles(){
@@ -658,7 +669,11 @@
   ]).then(function(res){
     const base = Array.isArray(res[0]) ? res[0] : [];
     const sb   = Array.isArray(res[1]) ? res[1] : [];
-    POSTS = base.concat(sb);   // berita di depan; artikel evergreen mengisi tab "Artikel"
+    // buang artikel sheet- lama di posts.json yang judulnya sudah ada di Supabase (hindari dobel)
+    const norm = s => String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+    const sbTitles = new Set(sb.map(x=>norm(x.title)));
+    const baseClean = base.filter(p=> !(String(p.id||'').indexOf('sheet-')===0 && sbTitles.has(norm(p.title))));
+    POSTS = baseClean.concat(sb);   // berita di depan; tab "Artikel" diurutkan terbaru-dulu di renderFeed
     renderChips(); renderFeed(); loadHeroBrief(); routeFromHash();
   }).catch(()=>{ renderChips(); renderFeed(); });
 </script>
