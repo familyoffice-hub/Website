@@ -432,8 +432,7 @@
     const feed=document.getElementById('feed'); feed.innerHTML='';
     const ft=document.getElementById('feedTitle');
     if(ft) ft.textContent = (activeCat==='Semua') ? 'Terbaru' : (CAT_LABEL[activeCat]||activeCat);
-    let list = POSTS.filter(matchCat);
-    if(activeCat==='Artikel') list = list.slice().sort((a,b)=> _postTs(b) - _postTs(a));
+    let list = POSTS.filter(matchCat).slice().sort((a,b)=> _postTs(b) - _postTs(a));
     document.getElementById('count').textContent = list.length ? `${list.length} artikel` : '';
     if(!list.length){
       const ch = (activeCat==='Semua') ? '' : ' di kanal '+(CAT_LABEL[activeCat]||activeCat);
@@ -634,17 +633,19 @@
     const d = Date.parse(s); const t = isNaN(d)?0:d; if(p) p._ts=t; return t;
   }
   function mapSb(row){
+    const cat   = row.category || 'Artikel';
+    const isArt = (cat === 'Artikel');
     const ts = row.created_at || row.published_at || row.inserted_at || '';
     let dateStr = '', t = 0;
     if(ts){ const d = new Date(ts); if(!isNaN(d)){ dateStr = d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); t = d.getTime(); } }
     return {
-      id:      'sheet-' + (row.id!=null ? row.id : Math.random().toString(36).slice(2)),
+      id:      (isArt ? 'sheet-' : 'news-') + (row.id!=null ? row.id : Math.random().toString(36).slice(2)),
       title:   row.title || '',
       summary: row.dek   || '',
       date:    dateStr,
-      tags:    ['Artikel'],
+      tags:    [cat],
       html:    row.body  || '',
-      source:  '',  // 'source' di Supabase = nama penulis, bukan URL -> jangan dijadikan link
+      source:  isArt ? '' : (row.url || ''),  // berita: link "Baca sumber asli"; artikel evergreen: tanpa link
       _ts:     t
     };
   }
@@ -669,11 +670,17 @@
   ]).then(function(res){
     const base = Array.isArray(res[0]) ? res[0] : [];
     const sb   = Array.isArray(res[1]) ? res[1] : [];
-    // buang artikel sheet- lama di posts.json yang judulnya sudah ada di Supabase (hindari dobel)
     const norm = s => String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
     const sbTitles = new Set(sb.map(x=>norm(x.title)));
-    const baseClean = base.filter(p=> !(String(p.id||'').indexOf('sheet-')===0 && sbTitles.has(norm(p.title))));
-    POSTS = baseClean.concat(sb);   // berita di depan; tab "Artikel" diurutkan terbaru-dulu di renderFeed
+    // Dari posts.json: tampilkan hanya item yang PUNYA ISI dan belum ada di Supabase.
+    // Berita lama tanpa isi (AI mati) tidak ditampilkan lagi -> berita kini datang dari Supabase.
+    const baseKeep = base.filter(p=>{
+      if(sbTitles.has(norm(p.title))) return false;
+      const isSheet = String(p.id||'').indexOf('sheet-')===0;
+      const hasBody = !!(p.html && String(p.html).trim());
+      return isSheet || hasBody;
+    });
+    POSTS = sb.concat(baseKeep);
     renderChips(); renderFeed(); loadHeroBrief(); routeFromHash();
   }).catch(()=>{ renderChips(); renderFeed(); });
 </script>
