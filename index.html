@@ -618,9 +618,48 @@
       }).catch(()=>heroLatestFallback());
   }
 
-  // muat artikel
-  fetch('posts.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(posts=>{
-    POSTS = Array.isArray(posts)?posts:[]; renderChips(); renderFeed(); loadHeroBrief(); routeFromHash();
+  // ===== Supabase: artikel evergreen Family Office (site = B) =====
+  const SB_URL  = 'https://hiuoitjfokwybaegeuev.supabase.co';   // Project URL proyek Supabase Family Office (Settings > API)
+  const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpdW9pdGpmb2t3eWJhZWdldWV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MzkwNjUsImV4cCI6MjA5ODUxNTA2NX0.AUAWujXuuKZa-iEwmDJmb4RDbkCH6a6I2RYicwWb_-0';     // Supabase > Settings > API > "anon public" (BUKAN service_role)
+  const SB_SITE = 'B';                          // penerbit menulis site="B"; biarkan cocok
+
+  function mapSb(row){
+    const ts = row.created_at || row.published_at || row.inserted_at || '';
+    let dateStr = '';
+    if(ts){ const d = new Date(ts); if(!isNaN(d)) dateStr = d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); }
+    return {
+      id:      'sheet-' + (row.id!=null ? row.id : Math.random().toString(36).slice(2)),
+      title:   row.title || '',
+      summary: row.dek   || '',
+      date:    dateStr,
+      tags:    ['Artikel'],
+      html:    row.body  || '',
+      source:  ''   // 'source' di Supabase = nama penulis, bukan URL -> jangan dijadikan link
+    };
+  }
+  function loadSupabaseArticles(){
+    if(!SB_ANON || SB_ANON.indexOf('PASTE')===0) return Promise.resolve([]);
+    const url = SB_URL + '/rest/v1/published_news?site=eq.' + SB_SITE +
+                '&show_on_web=eq.true&select=*&limit=500';
+    return fetch(url,{cache:'no-store',headers:{apikey:SB_ANON,Authorization:'Bearer '+SB_ANON}})
+      .then(r=> r.ok ? r.json() : [])
+      .then(rows=>{
+        if(!Array.isArray(rows)) return [];
+        rows.sort((a,b)=> (new Date(b.created_at||0)) - (new Date(a.created_at||0)));
+        return rows.map(mapSb);
+      })
+      .catch(()=>[]);
+  }
+
+  // muat artikel (posts.json + Supabase digabung)
+  Promise.all([
+    fetch('posts.json',{cache:'no-store'}).then(r=> r.ok ? r.json() : []).catch(()=>[]),
+    loadSupabaseArticles()
+  ]).then(function(res){
+    const base = Array.isArray(res[0]) ? res[0] : [];
+    const sb   = Array.isArray(res[1]) ? res[1] : [];
+    POSTS = base.concat(sb);   // berita di depan; artikel evergreen mengisi tab "Artikel"
+    renderChips(); renderFeed(); loadHeroBrief(); routeFromHash();
   }).catch(()=>{ renderChips(); renderFeed(); });
 </script>
 </body>
