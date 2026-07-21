@@ -1,10 +1,10 @@
 {
-  "updated": "2026-07-21T00:15:24Z",
+  "updated": "2026-07-21T09:44:41Z",
   "indices": [
     {
       "s": "IHSG",
-      "price": 6231.78,
-      "chg": 0.91
+      "price": 6340.02,
+      "chg": 1.74
     },
     {
       "s": "S&P 500",
@@ -23,120 +23,120 @@
     },
     {
       "s": "FTSE 100",
-      "price": 10524.76,
-      "chg": -0.45
+      "price": 10548.17,
+      "chg": -0.49
     },
     {
       "s": "NIKKEI 225",
-      "price": 64536.7,
-      "chg": 0.62
+      "price": 66232.19,
+      "chg": 3.26
     },
     {
       "s": "DAX 40",
-      "price": 24846.69,
-      "chg": -0.28
+      "price": 24922.49,
+      "chg": 0.37
     },
     {
       "s": "STOXX 50",
-      "price": 6227.4,
-      "chg": -0.06
+      "price": 6266.07,
+      "chg": 0.62
     },
     {
       "s": "CAC 40",
-      "price": 8340.11,
-      "chg": 0.02
+      "price": 8360.43,
+      "chg": 0.24
     },
     {
       "s": "HSI",
-      "price": 25143.05,
-      "chg": 0.54
+      "price": 25132.29,
+      "chg": 2.32
     },
     {
       "s": "SHANGHAI",
-      "price": 3796.28,
-      "chg": 0.85
+      "price": 3864.37,
+      "chg": 1.79
     },
     {
       "s": "KOSPI",
-      "price": 6516.27,
-      "chg": -4.46
+      "price": 6747.95,
+      "chg": -1.07
     },
     {
       "s": "TAIWAN",
-      "price": 42449.7,
-      "chg": -0.52
+      "price": 44232.87,
+      "chg": 4.2
     },
     {
       "s": "NIFTY 50",
-      "price": 24238.5,
-      "chg": -0.39
+      "price": 24182.8,
+      "chg": -0.23
     },
     {
       "s": "SENSEX",
-      "price": 77708.52,
-      "chg": -0.57
+      "price": 77493.81,
+      "chg": -0.28
     },
     {
       "s": "STI",
-      "price": 5498.95,
-      "chg": -0.73
+      "price": 5526.72,
+      "chg": 0.31
     },
     {
       "s": "KLCI",
-      "price": 1722.29,
-      "chg": -0.53
+      "price": 1720.37,
+      "chg": -0.11
     },
     {
       "s": "SET",
-      "price": 1646.0,
-      "chg": 0.42
+      "price": 1654.11,
+      "chg": 0.49
     },
     {
       "s": "PSEi",
-      "price": 6415.72,
-      "chg": 0.18
+      "price": 6333.8,
+      "chg": -1.28
     }
   ],
   "fx": [
     {
       "pair": "USD/IDR",
-      "price": 17944.1
+      "price": 17968.1
     },
     {
       "pair": "EUR/IDR",
-      "price": 20507.28
+      "price": 20516.73
     },
     {
       "pair": "JPY/IDR",
-      "price": 110.43
+      "price": 110.59
     },
     {
       "pair": "GBP/IDR",
-      "price": 24122.98
+      "price": 24138.61
     },
     {
       "pair": "CHF/IDR",
-      "price": 22200.57
+      "price": 22183.8
     },
     {
       "pair": "CNY/IDR",
-      "price": 2646.27
+      "price": 2650.91
     },
     {
       "pair": "CAD/IDR",
-      "price": 12798.75
+      "price": 12784.34
     },
     {
       "pair": "AUD/IDR",
-      "price": 12515.11
+      "price": 12577.62
     },
     {
       "pair": "SGD/IDR",
-      "price": 13888.31
+      "price": 13916.96
     },
     {
       "pair": "HKD/IDR",
-      "price": 2288.74
+      "price": 2291.46
     }
   ]
 }
