@@ -425,6 +425,10 @@
     const chips=document.getElementById('chips'); chips.innerHTML='';
     cats.forEach(c=>{ const b=document.createElement('button'); b.className='chip'+(c===activeCat?' active':''); b.textContent=CAT_LABEL[c]||c; b.onclick=()=>setCat(c); chips.appendChild(b); });
     const nav=document.getElementById('cats'); nav.innerHTML='';
+    /* Butir tetap: tautan keluar ke halaman kalkulator. Ditambahkan di sini
+       karena nav dikosongkan setiap kali kategori berganti. */
+    { const fp=document.createElement('a'); fp.textContent='Financial Planning';
+      fp.href='/alat/'; fp.style.color='var(--gold-soft)'; nav.appendChild(fp); }
     cats.forEach(c=>{ const a=document.createElement('a'); a.textContent=CAT_LABEL[c]||c; if(c===activeCat)a.style.color='var(--gold-soft)';
       a.onclick=()=>{ setCat(c); const y=document.querySelector('.chips').offsetTop-90; window.scrollTo({top:y,behavior:'smooth'}); }; nav.appendChild(a); });
   }
@@ -501,6 +505,8 @@
   (function(){
     const btn=document.getElementById('menuBtn'), panel=document.getElementById('mobileMenu');
     function build(){ panel.innerHTML='';
+      { const fp=document.createElement('a'); fp.textContent='Financial Planning';
+        fp.href='/alat/'; fp.style.color='var(--gold-soft)'; panel.appendChild(fp); }
       CATS.forEach(c=>{ const a=document.createElement('a'); a.textContent=CAT_LABEL[c]||c;
         if(c===activeCat) a.className='active';
         a.onclick=()=>{ setCat(c); panel.classList.remove('open');
