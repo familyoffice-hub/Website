@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-20T20:33:38Z",
+  "updated": "2026-08-21T01:38:40Z",
   "indices": [
     {
       "s": "IHSG",
@@ -28,8 +28,8 @@
     },
     {
       "s": "NIKKEI 225",
-      "price": 66216.79,
-      "chg": 1.36
+      "price": 65507.68,
+      "chg": -1.07
     },
     {
       "s": "DAX 40",
@@ -48,23 +48,23 @@
     },
     {
       "s": "HSI",
-      "price": 25698.49,
-      "chg": 0.89
+      "price": 25807.61,
+      "chg": 1.23
     },
     {
       "s": "SHANGHAI",
       "price": 3903.72,
-      "chg": 0.24
+      "chg": 0.0
     },
     {
       "s": "KOSPI",
-      "price": 6852.58,
-      "chg": -0.25
+      "price": 6869.39,
+      "chg": 6.15
     },
     {
       "s": "TAIWAN",
-      "price": 44933.74,
-      "chg": 0.48
+      "price": 44984.44,
+      "chg": 0.11
     },
     {
       "s": "NIFTY 50",
@@ -78,13 +78,13 @@
     },
     {
       "s": "STI",
-      "price": 5671.91,
-      "chg": -0.52
+      "price": 5663.18,
+      "chg": -0.55
     },
     {
       "s": "KLCI",
-      "price": 1736.71,
-      "chg": 0.31
+      "price": 1736.56,
+      "chg": -0.01
     },
     {
       "s": "SET",
@@ -100,43 +100,43 @@
   "fx": [
     {
       "pair": "USD/IDR",
-      "price": 17811.7
+      "price": 17757.68
     },
     {
       "pair": "EUR/IDR",
-      "price": 20748.82
+      "price": 20744.05
     },
     {
       "pair": "JPY/IDR",
-      "price": 112.34
+      "price": 111.81
     },
     {
       "pair": "GBP/IDR",
-      "price": 24205.02
+      "price": 24210.47
     },
     {
       "pair": "CHF/IDR",
-      "price": 22179.93
+      "price": 22209.56
     },
     {
       "pair": "CNY/IDR",
-      "price": 2640.31
+      "price": 2634.91
     },
     {
       "pair": "CAD/IDR",
-      "price": 12882.22
+      "price": 12885.87
     },
     {
       "pair": "AUD/IDR",
-      "price": 12657.31
+      "price": 12638.6
     },
     {
       "pair": "SGD/IDR",
-      "price": 13991.79
+      "price": 13962.11
     },
     {
       "pair": "HKD/IDR",
-      "price": 2271.62
+      "price": 2264.06
     }
   ]
 }
