@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-23T01:42:01Z",
+  "updated": "2026-08-24T01:39:22Z",
   "indices": [
     {
       "s": "IHSG",
@@ -28,8 +28,8 @@
     },
     {
       "s": "NIKKEI 225",
-      "price": 66016.36,
-      "chg": -0.3
+      "price": 66070.53,
+      "chg": 0.08
     },
     {
       "s": "DAX 40",
@@ -48,23 +48,23 @@
     },
     {
       "s": "HSI",
-      "price": 26009.46,
-      "chg": 2.02
+      "price": 25780.12,
+      "chg": 0.32
     },
     {
       "s": "SHANGHAI",
       "price": 3905.2,
-      "chg": 0.04
+      "chg": 0.0
     },
     {
       "s": "KOSPI",
-      "price": 6912.95,
-      "chg": 6.83
+      "price": 6837.85,
+      "chg": -0.21
     },
     {
       "s": "TAIWAN",
-      "price": 45224.29,
-      "chg": 0.65
+      "price": 45280.8,
+      "chg": 0.12
     },
     {
       "s": "NIFTY 50",
@@ -78,13 +78,13 @@
     },
     {
       "s": "STI",
-      "price": 5688.96,
-      "chg": -0.09
+      "price": 5711.24,
+      "chg": 0.69
     },
     {
       "s": "KLCI",
-      "price": 1736.48,
-      "chg": -0.01
+      "price": 1736.04,
+      "chg": -0.03
     },
     {
       "s": "SET",
@@ -94,49 +94,49 @@
     {
       "s": "PSEi",
       "price": 6238.46,
-      "chg": 1.3
+      "chg": 0.0
     }
   ],
   "fx": [
     {
       "pair": "USD/IDR",
-      "price": 17683.59
+      "price": 17693.86
     },
     {
       "pair": "EUR/IDR",
-      "price": 20657.79
+      "price": 20666.05
     },
     {
       "pair": "JPY/IDR",
-      "price": 111.3
+      "price": 111.35
     },
     {
       "pair": "GBP/IDR",
-      "price": 24125.05
+      "price": 24140.78
     },
     {
       "pair": "CHF/IDR",
-      "price": 22080.14
+      "price": 22093.91
     },
     {
       "pair": "CNY/IDR",
-      "price": 2622.49
+      "price": 2629.45
     },
     {
       "pair": "CAD/IDR",
-      "price": 12850.43
+      "price": 12835.43
     },
     {
       "pair": "AUD/IDR",
-      "price": 12661.0
+      "price": 12682.06
     },
     {
       "pair": "SGD/IDR",
-      "price": 13930.05
+      "price": 13937.22
     },
     {
       "pair": "HKD/IDR",
-      "price": 2255.39
+      "price": 2256.93
     }
   ]
 }
