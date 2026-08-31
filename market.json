@@ -1,10 +1,10 @@
 {
-  "updated": "2026-08-30T01:31:55Z",
+  "updated": "2026-08-31T04:48:29Z",
   "indices": [
     {
       "s": "IHSG",
-      "price": 6518.12,
-      "chg": -0.06
+      "price": 6491.72,
+      "chg": -0.41
     },
     {
       "s": "S&P 500",
@@ -28,8 +28,8 @@
     },
     {
       "s": "NIKKEI 225",
-      "price": 66405.56,
-      "chg": 0.41
+      "price": 65841.24,
+      "chg": -0.85
     },
     {
       "s": "DAX 40",
@@ -48,48 +48,48 @@
     },
     {
       "s": "HSI",
-      "price": 25584.79,
-      "chg": -0.27
+      "price": 25402.36,
+      "chg": -0.64
     },
     {
       "s": "SHANGHAI",
-      "price": 3952.18,
-      "chg": -0.11
+      "price": 3944.46,
+      "chg": -0.2
     },
     {
       "s": "KOSPI",
-      "price": 6788.88,
-      "chg": -0.28
+      "price": 6689.91,
+      "chg": -3.22
     },
     {
       "s": "TAIWAN",
-      "price": 46331.45,
-      "chg": 0.77
+      "price": 45706.81,
+      "chg": -1.35
     },
     {
       "s": "NIFTY 50",
-      "price": 24175.65,
-      "chg": 0.35
+      "price": 24015.25,
+      "chg": -0.66
     },
     {
       "s": "SENSEX",
-      "price": 77264.51,
-      "chg": 0.43
+      "price": 76873.64,
+      "chg": -0.51
     },
     {
       "s": "STI",
-      "price": 5699.93,
-      "chg": -0.38
+      "price": 5729.91,
+      "chg": 0.81
     },
     {
       "s": "KLCI",
       "price": 1725.88,
-      "chg": -0.91
+      "chg": 0.0
     },
     {
       "s": "SET",
-      "price": 1588.22,
-      "chg": -0.78
+      "price": 1588.45,
+      "chg": 0.01
     },
     {
       "s": "PSEi",
@@ -100,43 +100,43 @@
   "fx": [
     {
       "pair": "USD/IDR",
-      "price": 17749.33
+      "price": 17733.61
     },
     {
       "pair": "EUR/IDR",
-      "price": 20601.82
+      "price": 20565.59
     },
     {
       "pair": "JPY/IDR",
-      "price": 110.98
+      "price": 110.8
     },
     {
       "pair": "GBP/IDR",
-      "price": 24053.81
+      "price": 24021.17
     },
     {
       "pair": "CHF/IDR",
-      "price": 21963.79
+      "price": 21946.36
     },
     {
       "pair": "CNY/IDR",
-      "price": 2631.12
+      "price": 2632.75
     },
     {
       "pair": "CAD/IDR",
-      "price": 12780.6
+      "price": 12765.56
     },
     {
       "pair": "AUD/IDR",
-      "price": 12726.25
+      "price": 12703.93
     },
     {
       "pair": "SGD/IDR",
-      "price": 13940.63
+      "price": 13921.47
     },
     {
       "pair": "HKD/IDR",
-      "price": 2263.87
+      "price": 2261.82
     }
   ]
 }
