@@ -666,16 +666,20 @@
   }
   function loadSupabaseArticles(){
     if(!SB_ANON || SB_ANON.indexOf('PASTE')===0) return Promise.resolve([]);
-    const url = SB_URL + '/rest/v1/published_news?site=eq.' + SB_SITE +
-                '&show_on_web=eq.true&select=*&limit=500';
-    return fetch(url,{cache:'no-store',headers:{apikey:SB_ANON,Authorization:'Bearer '+SB_ANON}})
-      .then(r=> r.ok ? r.json() : [])
-      .then(rows=>{
-        if(!Array.isArray(rows)) return [];
-        rows.sort((a,b)=> (new Date(b.created_at||0)) - (new Date(a.created_at||0)));
-        return rows.map(mapSb);
-      })
-      .catch(()=>[]);
+    // Ambil yang TERBARU dulu (order desc). Artikel & berita diambil terpisah,
+    // supaya berita harian tidak "mendesak keluar" artikel dari batas 500 baris.
+    const base = SB_URL + '/rest/v1/published_news?site=eq.' + SB_SITE +
+                 '&show_on_web=eq.true&select=*&order=created_at.desc&limit=500';
+    const get = q => fetch(base + q,{cache:'no-store',headers:{apikey:SB_ANON,Authorization:'Bearer '+SB_ANON}})
+      .then(r=> r.ok ? r.json() : []).catch(()=>[]);
+    return Promise.all([
+      get('&or=(category.eq.Artikel,category.is.null)'),   // artikel evergreen
+      get('&category=neq.Artikel')                         // berita harian
+    ]).then(res=>{
+      const rows = [].concat(Array.isArray(res[0])?res[0]:[], Array.isArray(res[1])?res[1]:[]);
+      rows.sort((a,b)=> (new Date(b.created_at||0)) - (new Date(a.created_at||0)));
+      return rows.map(mapSb);
+    }).catch(()=>[]);
   }
 
   // muat artikel (posts.json + Supabase digabung)
