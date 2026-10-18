@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-17T04:52:48Z",
+  "updated": "2026-10-18T03:54:32Z",
   "indices": [
     {
       "s": "IHSG",
@@ -100,43 +100,43 @@
   "fx": [
     {
       "pair": "USD/IDR",
-      "price": 18014.64
+      "price": 18014.03
     },
     {
       "pair": "EUR/IDR",
-      "price": 20252.15
+      "price": 20249.26
     },
     {
       "pair": "JPY/IDR",
-      "price": 114.02
+      "price": 114.01
     },
     {
       "pair": "GBP/IDR",
-      "price": 23992.67
+      "price": 23991.67
     },
     {
       "pair": "CHF/IDR",
-      "price": 21850.59
+      "price": 21845.4
     },
     {
       "pair": "CNY/IDR",
-      "price": 2689.37
+      "price": 2687.49
     },
     {
       "pair": "CAD/IDR",
-      "price": 12733.63
+      "price": 12733.33
     },
     {
       "pair": "AUD/IDR",
-      "price": 12513.49
+      "price": 12511.43
     },
     {
       "pair": "SGD/IDR",
-      "price": 14074.84
+      "price": 14074.47
     },
     {
       "pair": "HKD/IDR",
-      "price": 2295.47
+      "price": 2295.35
     }
   ]
 }
