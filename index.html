@@ -381,61 +381,85 @@
   renderTicker();
 
   let cryptoOk=false, globalOk=false, fxOk=false, indexOk=false;
+  let cryptoBusy=false, globalBusy=false;
+
+  // --- Cache di browser: angka terakhir langsung tampil saat halaman dibuka,
+  //     lalu diperbarui di latar belakang (tidak perlu menunggu API) ---
+  const CACHE_MAX_MS = 12*3600*1000;
+  function cacheGet(k){ try{ const o=JSON.parse(localStorage.getItem(k)||'null'); return (o && o.d && (Date.now()-o.t) < CACHE_MAX_MS) ? o.d : null; }catch(e){ return null; } }
+  function cacheSet(k,d){ try{ localStorage.setItem(k, JSON.stringify({t:Date.now(), d:d})); }catch(e){} }
 
   // --- Crypto (CoinGecko, gratis) ---
+  function applyCrypto(d){
+    let got=0;
+    TK.crypto = COINS.map(c=>{
+      const o=d[c.id]; if(!o) return tkItem(c.s,'…');
+      got++; return tkItem(c.s, fmtUsd(o.usd), o.usd_24h_change||0);
+    });
+    if(got>0) renderTicker();
+    return got;
+  }
   async function loadCrypto(){
+    if(cryptoBusy) return; cryptoBusy=true;    // jangan menumpuk permintaan
     try{
       const ids = COINS.map(c=>c.id).join(',');
       const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`,{cache:'no-store'});
       if(!r.ok) throw 0;
-      const d = await r.json(); let got=0;
-      TK.crypto = COINS.map(c=>{
-        const o=d[c.id]; if(!o) return tkItem(c.s,'…');
-        got++; return tkItem(c.s, fmtUsd(o.usd), o.usd_24h_change||0);
-      });
-      if(got>0){ cryptoOk=true; renderTicker(); }
-    }catch(e){}
+      const d = await r.json();
+      if(applyCrypto(d)>0){ cryptoOk=true; cacheSet('fo-c-crypto', d); }
+    }catch(e){} finally{ cryptoBusy=false; }
   }
 
   // --- Index bursa + Currency (dari market.json, ditulis server tiap 30 menit; bebas CORS) ---
+  function applyMarket(m){
+    if(Array.isArray(m.indices) && m.indices.length)
+      TK.index = m.indices.map(x=> tkItem(x.s, (typeof x.price==='number')?fmtIdx(x.price):'…', (typeof x.chg==='number')?x.chg:undefined));
+    if(Array.isArray(m.fx) && m.fx.length)
+      TK.fx = m.fx.map(x=> tkItem(x.pair, (typeof x.price==='number')?fmtFx(x.price):'…'));
+    renderTicker();
+    if(m.indices && m.indices.some(x=>typeof x.price==='number')) indexOk=true;
+  }
   async function loadMarket(){
     try{
       const r = await fetch('market.json?t='+Date.now(),{cache:'no-store'});
       if(!r.ok) throw 0;
       const m = await r.json();
-      if(Array.isArray(m.indices) && m.indices.length)
-        TK.index = m.indices.map(x=> tkItem(x.s, (typeof x.price==='number')?fmtIdx(x.price):'…', (typeof x.chg==='number')?x.chg:undefined));
-      if(Array.isArray(m.fx) && m.fx.length)
-        TK.fx = m.fx.map(x=> tkItem(x.pair, (typeof x.price==='number')?fmtFx(x.price):'…'));
-      renderTicker();
-      if(m.indices && m.indices.some(x=>typeof x.price==='number')) indexOk=true;
+      applyMarket(m); cacheSet('fo-c-market', m);
     }catch(e){}
   }
 
   // --- Statistik global (kartu di bawah header) ---
+  function paintGlobal(g){
+    document.getElementById('mc').textContent = fmtBig(g.mc);
+    const mcc = document.getElementById('mcc'); mcc.textContent = sign(g.ch)+' (24j)'; mcc.className = 'ch num '+(g.ch>=0?'up':'down');
+    document.getElementById('dom').textContent = (g.dom||0).toFixed(1)+'%';
+    document.getElementById('vol').textContent = fmtBig(g.vol);
+  }
   async function loadGlobal(){
+    if(globalBusy) return; globalBusy=true;    // jangan menumpuk permintaan
     try{
       const r = await fetch('https://api.coingecko.com/api/v3/global',{cache:'no-store'});
       if(!r.ok) throw 0;
-      const g = (await r.json()).data;
-      document.getElementById('mc').textContent = fmtBig(g.total_market_cap.usd);
-      const ch = g.market_cap_change_percentage_24h_usd||0;
-      const mcc = document.getElementById('mcc'); mcc.textContent = sign(ch)+' (24j)'; mcc.className = 'ch num '+(ch>=0?'up':'down');
-      document.getElementById('dom').textContent = (g.market_cap_percentage.btc||0).toFixed(1)+'%';
-      document.getElementById('vol').textContent = fmtBig(g.total_volume.usd);
+      const d = (await r.json()).data;
+      const g = { mc:d.total_market_cap.usd, ch:d.market_cap_change_percentage_24h_usd||0,
+                  dom:d.market_cap_percentage.btc||0, vol:d.total_volume.usd };
+      paintGlobal(g); cacheSet('fo-c-global', g);
       globalOk=true;
-    }catch(e){}
+    }catch(e){} finally{ globalBusy=false; }
   }
 
-  // muat segera
+  // tampilkan angka tersimpan SEKARANG (tanpa menunggu jaringan), lalu muat yang terbaru
+  (function(){
+    const g=cacheGet('fo-c-global'); if(g) paintGlobal(g);
+    const c=cacheGet('fo-c-crypto'); if(c) applyCrypto(c);
+    const m=cacheGet('fo-c-market'); if(m) applyMarket(m);
+  })();
   loadCrypto(); loadGlobal(); loadMarket();
-  // coba ulang cepat untuk crypto/stat sampai tampil
-  let quickTries=0;
-  const quick=setInterval(()=>{
-    quickTries++;
-    if((cryptoOk && globalOk) || quickTries>=8){ clearInterval(quick); return; }
-    if(!cryptoOk) loadCrypto(); if(!globalOk) loadGlobal();
-  }, 2500);
+  // bila belum berhasil: coba ulang dengan jeda bertahap (3, 6, 12, 20, 30 detik)
+  (function retry(i){
+    const wait=[3000,6000,12000,20000,30000][i]; if(wait==null) return;
+    setTimeout(()=>{ if(!cryptoOk) loadCrypto(); if(!globalOk) loadGlobal(); if(!(cryptoOk&&globalOk)) retry(i+1); }, wait);
+  })(0);
   // refresh berkala: crypto & statistik tiap 60 detik; index & currency (market.json) tiap 60 detik
   setInterval(()=>{ cryptoOk=false; globalOk=false; loadCrypto(); loadGlobal(); }, 60000);
   setInterval(loadMarket, 60000);
