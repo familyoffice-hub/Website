@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Family Office — Intelijen Pasar: Saham, Crypto &amp; Keuangan</title>
 <meta name="description" content="Portal intelijen pasar harian: saham, crypto, dan keuangan. Berita yang diringkas AI, harga live, dan analisis untuk Indonesia." />
+<meta name="theme-color" content="#0E1A2B" />
+<script>
+/* Terapkan tema sebelum halaman digambar, supaya tidak berkedip. */
+(function(){
+  var t = "gelap", s = null;
+  try{ s = localStorage.getItem("fo-tema"); }catch(e){}
+  if(s==="gelap" || s==="terang") t = s;
+  else if(window.matchMedia && matchMedia("(prefers-color-scheme: light)").matches) t = "terang";
+  document.documentElement.setAttribute("data-tema", t);
+  var m = document.querySelector('meta[name="theme-color"]');
+  if(m) m.setAttribute("content", t==="gelap" ? "#0E1A2B" : "#F6F2E8");
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -17,6 +30,26 @@
     --line:rgba(195,163,104,.24);--line2:rgba(148,163,180,.16);
     --maxw:1240px;--ease:cubic-bezier(.22,.61,.36,1);
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --ticker-bg:#0A1422;--head-bg:rgba(14,26,43,.92);--panel-bg:#0C1727;
+    --latest-bg:linear-gradient(160deg,rgba(21,38,60,.6),rgba(14,26,43,.25));
+    --card-bg:rgba(21,38,60,.4);--card-bg-hover:rgba(21,38,60,.72);
+    --sub-bg:linear-gradient(180deg,#0C1727,var(--ink));--input-bg:rgba(21,38,60,.6);
+    --faint:#70808f;--overlay:rgba(6,12,20,.78);--menu-shadow:0 14px 30px rgba(0,0,0,.45);
+    color-scheme:dark;
+  }
+  /* TEMA TERANG (aktif lewat tombol bulan sabit) — hanya menimpa token warna */
+  :root[data-tema="terang"]{
+    color-scheme:light;
+    --ink:#F6F2E8;--ink-2:#FFFFFF;--ink-3:#EFE9DB;
+    --ivory:#16233A;--ivory-dim:#44546A;
+    --gold:#8A6A2E;--gold-soft:#6F531F;--teal:#1F7F7A;
+    --up:#0E8F66;--down:#C2492D;--muted:#5B6B7E;
+    --line:rgba(138,106,46,.32);--line2:rgba(22,35,58,.14);
+    --ticker-bg:#EAE4D4;--head-bg:rgba(246,242,232,.92);--panel-bg:#EFE9DB;
+    --latest-bg:linear-gradient(160deg,#FFFFFF,#F7F2E6);
+    --card-bg:#FFFFFF;--card-bg-hover:#FFFDF7;
+    --sub-bg:linear-gradient(180deg,#EFE9DB,var(--ink));--input-bg:#FFFFFF;
+    --faint:#6B7A8C;--overlay:rgba(22,35,58,.5);--menu-shadow:0 14px 30px rgba(22,35,58,.18);
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -29,7 +62,7 @@
   .up{color:var(--up)} .down{color:var(--down)}
 
   /* TICKER */
-  .ticker{position:sticky;top:0;z-index:45;background:#0A1422;border-bottom:1px solid var(--line2);overflow:hidden;height:42px}
+  .ticker{position:sticky;top:0;z-index:45;background:var(--ticker-bg);border-bottom:1px solid var(--line2);overflow:hidden;height:42px}
   .ticker-track{display:flex;align-items:center;gap:30px;height:42px;white-space:nowrap;width:max-content;
     animation:scroll 60s linear infinite;will-change:transform}
   .ticker:hover .ticker-track{animation-play-state:paused}
@@ -41,7 +74,7 @@
   @media (prefers-reduced-motion:reduce){.ticker-track{animation-duration:90s}}
 
   /* HEADER */
-  header.site{position:sticky;top:42px;z-index:40;background:rgba(14,26,43,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line2)}
+  header.site{position:sticky;top:42px;z-index:40;background:var(--head-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line2)}
   .hbar{display:flex;align-items:center;justify-content:space-between;height:66px;gap:20px}
   .brand{display:flex;align-items:center;gap:11px;font-family:"Fraunces",serif;font-size:1.16rem;flex:0 0 auto}
   .brand .mk{width:28px;height:28px}
@@ -55,19 +88,25 @@
   .btn-solid{background:var(--gold);color:var(--ink)}
   .btn-solid:hover{background:var(--gold-soft)}
   .menu-btn{display:none;background:none;border:0;color:var(--ivory);cursor:pointer;padding:6px}
-  .mobile-menu{position:absolute;top:66px;left:0;right:0;background:#0C1727;border-bottom:1px solid var(--line2);box-shadow:0 14px 30px rgba(0,0,0,.45);display:none;flex-direction:column;z-index:39}
+  .mobile-menu{position:absolute;top:66px;left:0;right:0;background:var(--panel-bg);border-bottom:1px solid var(--line2);box-shadow:var(--menu-shadow);display:none;flex-direction:column;z-index:39}
   .mobile-menu.open{display:flex}
   .mobile-menu a{padding:14px 22px;color:var(--ivory-dim);font-size:.95rem;border-top:1px solid var(--line2);cursor:pointer}
   .mobile-menu a:first-child{border-top:0}
   .mobile-menu a.active{color:var(--gold-soft)}
-  .mobile-menu{position:absolute;top:66px;left:0;right:0;background:#0C1727;border-bottom:1px solid var(--line2);box-shadow:0 14px 30px rgba(0,0,0,.45);display:none;flex-direction:column;z-index:39}
+  .mobile-menu{position:absolute;top:66px;left:0;right:0;background:var(--panel-bg);border-bottom:1px solid var(--line2);box-shadow:var(--menu-shadow);display:none;flex-direction:column;z-index:39}
   .mobile-menu.open{display:flex}
   .mobile-menu a{padding:14px 22px;color:var(--ivory-dim);font-size:.95rem;border-top:1px solid var(--line2);cursor:pointer}
   .mobile-menu a:first-child{border-top:0}
   .mobile-menu a.active{color:var(--gold-soft)}
 
+  .theme-btn{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:38px;height:38px;padding:0;
+    border:1px solid var(--line);border-radius:3px;background:transparent;color:var(--gold);cursor:pointer;
+    transition:border-color .2s,color .2s}
+  .theme-btn:hover{border-color:var(--gold);color:var(--gold-soft)}
+  .theme-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
   /* MARKET STATS */
-  .stats{border-bottom:1px solid var(--line2);background:#0C1727}
+  .stats{border-bottom:1px solid var(--line2);background:var(--panel-bg)}
   .stats .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
   .st{padding:18px 22px;border-left:1px solid var(--line2)}
   .st:first-child{border-left:0}
@@ -84,7 +123,7 @@
   .intro-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center}
   .intro-left{min-width:0}
   .intro-latest{border:1px solid var(--line);border-radius:12px;padding:18px 20px 10px;
-    background:linear-gradient(160deg,rgba(21,38,60,.6),rgba(14,26,43,.25))}
+    background:var(--latest-bg)}
   .il-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px}
   .il-head .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
   .il-list{display:flex;flex-direction:column}
@@ -121,9 +160,9 @@
   .sec-title span{font-size:.8rem;color:var(--muted)}
   .feed{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:10px}
   .card{display:flex;flex-direction:column;gap:11px;text-align:left;border:1px solid var(--line2);border-radius:8px;
-    background:rgba(21,38,60,.4);padding:22px 20px;cursor:pointer;color:inherit;font:inherit;
+    background:var(--card-bg);padding:22px 20px;cursor:pointer;color:inherit;font:inherit;
     transition:transform .3s var(--ease),border-color .3s,background .3s}
-  .card:hover{transform:translateY(-4px);border-color:var(--gold);background:rgba(21,38,60,.72)}
+  .card:hover{transform:translateY(-4px);border-color:var(--gold);background:var(--card-bg-hover)}
   .card.feat{grid-column:span 3;flex-direction:row;gap:28px;align-items:center;padding:30px 28px}
   .card.feat .ftxt{flex:1}
   .card.feat .fbadge{flex:0 0 auto;width:150px;height:150px;border-radius:10px;display:flex;align-items:center;justify-content:center;
@@ -138,12 +177,12 @@
   .empty{padding:50px 0;color:var(--muted);text-align:center;border:1px dashed var(--line2);border-radius:10px}
 
   /* SUBSCRIBE */
-  .sub{margin:70px 0 0;border-top:1px solid var(--line2);background:linear-gradient(180deg,#0C1727,var(--ink))}
+  .sub{margin:70px 0 0;border-top:1px solid var(--line2);background:var(--sub-bg)}
   .sub .wrap{padding:64px 22px;text-align:center}
   .sub h2{font-size:clamp(1.7rem,1.2rem + 1.8vw,2.6rem)}
   .sub p{color:var(--muted);max-width:54ch;margin:16px auto 0}
   .sub .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
-  .sub input{background:rgba(21,38,60,.6);border:1px solid var(--line);border-radius:4px;color:var(--ivory);
+  .sub input{background:var(--input-bg);border:1px solid var(--line);border-radius:4px;color:var(--ivory);
     padding:.8em 1.1em;font-family:inherit;min-width:260px}
   .sub input:focus{outline:none;border-color:var(--gold)}
 
@@ -153,10 +192,10 @@
   .foot-grid h4{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-family:"Hanken Grotesk",sans-serif;font-weight:600}
   .foot-grid a,.foot-grid span{display:block;font-size:.9rem;color:var(--ivory-dim);margin-bottom:8px}
   .foot-grid a:hover{color:var(--gold-soft)}
-  .disclaimer{margin-top:34px;padding-top:22px;border-top:1px solid var(--line2);font-size:.78rem;color:#70808f;max-width:96ch;line-height:1.7}
+  .disclaimer{margin-top:34px;padding-top:22px;border-top:1px solid var(--line2);font-size:.78rem;color:var(--faint);max-width:96ch;line-height:1.7}
 
   /* MODAL */
-  .modal{position:fixed;inset:0;z-index:80;background:rgba(6,12,20,.78);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:38px 16px;overflow:auto}
+  .modal{position:fixed;inset:0;z-index:80;background:var(--overlay);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:38px 16px;overflow:auto}
   .modal[hidden]{display:none}
   .modal-in{position:relative;max-width:780px;width:100%;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:48px clamp(22px,4vw,56px);margin:auto}
   #mClose{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--ivory);cursor:pointer;font-size:1.2rem}
@@ -174,7 +213,7 @@
   .art li{margin:0 0 6px}
   .art .src{margin-top:22px}
   .art .src a{color:var(--teal);font-size:.9rem}
-  .art .disc{margin-top:22px;padding-top:16px;border-top:1px solid var(--line2);font-size:.78rem;color:#70808f;line-height:1.7}
+  .art .disc{margin-top:22px;padding-top:16px;border-top:1px solid var(--line2);font-size:.78rem;color:var(--faint);line-height:1.7}
 
   @media (max-width:1000px){
     nav.cats{display:none}.menu-btn{display:block}
@@ -186,6 +225,8 @@
     .card.feat .fbadge{width:100%;height:110px}
     .stats .wrap{grid-template-columns:1fr 1fr}
   }
+  /* HP: tombol Berlangganan pindah ke dalam menu agar header muat */
+  @media (max-width:620px){ .hcta .btn{display:none} }
   :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
 </style>
 </head>
@@ -203,6 +244,9 @@
     </a>
     <nav class="cats" id="cats"></nav>
     <div class="hcta">
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Ganti ke tema terang" title="Ganti tema">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <a class="btn" href="#langganan">Berlangganan</a>
     </div>
     <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
@@ -511,7 +555,9 @@
         if(c===activeCat) a.className='active';
         a.onclick=()=>{ setCat(c); panel.classList.remove('open');
           const y=document.querySelector('.chips').offsetTop-80; window.scrollTo({top:y,behavior:'smooth'}); };
-        panel.appendChild(a); }); }
+        panel.appendChild(a); });
+      { const sb=document.createElement('a'); sb.textContent='Berlangganan'; sb.href='#langganan';
+        sb.style.color='var(--gold-soft)'; sb.onclick=()=>panel.classList.remove('open'); panel.appendChild(sb); } }
     btn.onclick=(e)=>{ e.stopPropagation(); build(); panel.classList.toggle('open'); };
     document.addEventListener('click',(e)=>{ if(!panel.contains(e.target) && e.target!==btn && !btn.contains(e.target)) panel.classList.remove('open'); });
   })();
@@ -702,6 +748,25 @@
     POSTS = sb.concat(baseKeep);
     renderChips(); renderFeed(); loadHeroBrief(); routeFromHash();
   }).catch(()=>{ renderChips(); renderFeed(); });
+</script>
+<script>
+/* Ganti tema gelap/terang (pilihan disimpan di browser pengunjung) */
+(function(){
+  var btn = document.getElementById("themeBtn");
+  if(!btn) return;
+  var akar = document.documentElement;
+  function terapkan(t, simpan){
+    akar.setAttribute("data-tema", t);
+    btn.setAttribute("aria-label", t==="gelap" ? "Ganti ke tema terang" : "Ganti ke tema gelap");
+    var m = document.querySelector('meta[name="theme-color"]');
+    if(m) m.setAttribute("content", t==="gelap" ? "#0E1A2B" : "#F6F2E8");
+    if(simpan){ try{ localStorage.setItem("fo-tema", t); }catch(e){} }
+  }
+  terapkan(akar.getAttribute("data-tema") || "gelap", false);
+  btn.addEventListener("click", function(){
+    terapkan(akar.getAttribute("data-tema")==="gelap" ? "terang" : "gelap", true);
+  });
+})();
 </script>
 </body>
 </html>
